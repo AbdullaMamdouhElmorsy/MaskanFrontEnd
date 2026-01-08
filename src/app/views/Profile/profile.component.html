@@ -1,0 +1,73 @@
+
+<div class="card">
+    <div class="card-header rounded">
+        <h6 class="m-2">Profile Information</h6>
+        </div>
+    <form action="" [formGroup]="changePassowrdFormGroup" class="container" (ngSubmit)="changePassword()">
+        <div class="row">
+            <div class="col-md-4 col-sm-12 col-12 my-2">
+                <label for="">{{"User Name"}}</label>
+                <input type="text" class="form-control" [value]="loggedUserinfo?.userName" placeholder="{{'UserName'}}" disabled> 
+               
+            </div>
+            <div class="col-md-4 col-sm-12 col-12 my-2">
+                <label for="">{{"Email"}}</label>
+                <input type="text" class="form-control" [value]="loggedUserinfo?.email" placeholder="{{'Email'}}" disabled> 
+               
+            </div>
+            <!-- <div class="col-md-4 col-sm-12 col-12 my-2">
+                <label for="">{{"Phone Number"}}</label>
+                <input type="text" class="form-control"  [value]="loggedUserinfo?.phoneNumber" placeholder="{{'Phone Number'}}" disabled> 
+               
+            </div> -->
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-xs-12 col-12">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-12 my-2">
+                        <label for="">{{"Current Password"}}</label><strong class="required">*</strong>
+                        <input type="password" class="form-control" placeholder="{{'Current Password'}}" formControlName="currentPassword"> 
+                        <div class="alert" *ngIf="pattrenValidation('name')">
+                            <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-12 my-2">
+                        <label for="">{{"New Password"}}</label><strong class="required">*</strong>
+                        <input type="password" class="form-control" placeholder="{{'New Password'}}" formControlName="newPassword"> 
+                        <div class="alert" *ngIf="pattrenValidation('newPassword')">
+                            <ul class="alert-danger">
+                                <li>Passowrd Should have at least one lower case </li>
+                                <li>Password Should have at least one upper case</li>
+                                <li>Password Should have at least one number </li>
+                                <li>Passowrd Should have at least one special character</li>
+                                <li>Minimum 8 characters</li>
+                              </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 col-12 my-2">
+                        <label for="">{{"Confirmed Password"}}</label><strong class="required">*</strong>
+                        <input type="password" class="form-control" placeholder="{{'Confirmed Password'}}" formControlName="confirmedNewPassword"> 
+                        <div class="alert" *ngIf="!match()">
+                            <p class=" alert alert-danger">Password Does Not Match</p>
+                        </div>
+                    </div>
+                    
+                   
+                  <div class=" col-md-12 py-2 col-sm-12 col-12 mt-4">
+                    <button class="btn   px-4 w-100"  type="submit" [disabled]="!isValid()"
+                   
+                    >{{"Save" | translate}}</button>
+                   </div>
+                    
+
+                </div>
+               
+                
+            </div>
+            
+          
+        </div>
+     
+    
+</form>
+</div>

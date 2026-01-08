@@ -1,0 +1,617 @@
+<div class="accordion my-3" id="accordionExample" *ngIf="isAdmin()">
+    <div class="card">
+      <div class="card-header p-0" id="headingOne">
+        
+            <div class="add-branche p-1">
+                <span>{{"CreateUser" | translate}}</span>
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('table')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateAddIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+   
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+                <form action="" [formGroup]="userFormGroup" (ngSubmit)="createUser()">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-12">
+                            <div class="row w-100">
+                                <div class="col-md-4 col-sm-12 col-12 my-2">
+                                    <label for="">{{"FirstName" | translate}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'FirstName' | translate}}" formControlName="firstName"> 
+                                    <div class="alert" *ngIf="pattrenValidation('firstName')">
+                                        <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="">{{"LastName"| translate}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'LastName' | translate}}" formControlName="lastName"> 
+                                    <div class="alert" *ngIf="pattrenValidation('lastName')">
+                                        <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="">{{"UserName" | translate}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'UserName' | translate}}" formControlName="userName"> 
+                                    <!-- <div class="alert" *ngIf="pattrenValidation('DepartmentLatinName')">
+                                        <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                                    </div> -->
+                                </div>
+                               
+                                <div class="col-md-4 col-sm-12 col-12 my-2">
+                                    <label for="">{{"EmailAddress" | translate}}</label><strong class="required">*</strong>
+                                    <input type="email" class="form-control" placeholder="{{'EmailAddress' | translate}}" formControlName="email"> 
+                                    <div class="alert" *ngIf="pattrenValidation('email')">
+                                        <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="">{{"PhoneNumber" | translate}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'PhoneNumber' | translate}}" formControlName="phoneNumber"> 
+                                    <div class="alert" *ngIf="pattrenValidation('phoneNumber')">
+                                        <p class=" alert alert-danger">{{"messages.InvalidNumber"| translate}}</p>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="" class="">{{"National Id"}}</label>
+                                    <strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'National Id'}}" formControlName="nationalId"> 
+                                    <div class="alert" *ngIf="pattrenValidation('nationalId')">
+                                        <p class=" alert alert-danger">National Id Is not InValid</p>
+                                    </div>
+                                </div> -->
+                               
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="" class="">{{"Password" | translate}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'Password' |translate}}" formControlName="password"> 
+                                    <div class="alert" *ngIf="pattrenValidation('password')">
+                                        <ul class="alert-danger">
+                                            <li>{{"messages.PasswordShouldHaveAtLeastOneLowerCase" | translate}} </li>
+                                            <li>{{"messages.PasswordShouldHaveAtLeastOneUpperCase" | translate}} </li>
+                                            <li>{{"messages.PasswordShouldHaveAtLeastOneNumber" | translate}} </li>
+                                            <li>{{"messages.PasswordShouldHaveAtLeastOneSpecialCharacter" | translate}} </li>
+                                            <li>{{"messages.Minimum8Characters" | translate}} </li>
+                                          </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12 my-2">
+                                    <label for="" class="">{{"ConfirmPassword" | translate}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'ConfirmPassword' | translate}}" formControlName="confirmPassowrd"> 
+                                    <!-- <div class="alert" *ngIf="pattrenValidation('nationalId')">
+                                        <p class=" alert alert-danger">National Id Is not InValid</p>
+                                    </div> -->
+                                </div>
+                                
+                                <div class="col-md-3 my-auto">
+                                    <label for="">{{"SelectRole" |translate}}</label>
+                                    <strong class="required">*</strong>
+                                    <select  class="form-control" formControlName="defaultRoleName">
+                                        <option value="null">{{"Select" | translate}}</option>
+                                        <option [value]="role.value" *ngFor="let role of roles">{{role.label}}</option>
+                                    </select>
+                                  
+                                </div>
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="" class="">{{"Job" | translate}}</label>
+
+                                    <input type="text" class="form-control" placeholder="{{'Job' |  translate}}" formControlName="job"> 
+                                    <!-- <div class="alert" *ngIf="pattrenValidation('nationalId')">
+                                        <p class=" alert alert-danger">National Id Is not InValid</p>
+                                    </div> -->
+                                </div>
+                                
+
+                               
+                                <div class=" col-md-2 py-2 col-sm-12 col-12 mt-4 ml-2">
+                                    <button class="btn   px-4 w-100"  type="submit" [disabled]="!isValid()"
+                                   
+                                    >{{"Save" | translate}}</button>
+                                   </div>
+                                
+                              
+                             
+                              
+                           
+                                
+
+                            </div>
+                           
+                            
+                        </div>
+                        
+                      
+                    </div>
+                 
+                
+            </form>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+
+
+
+<!--------------- Unite Table------------------  -->
+<div class="accordion my-3" id="accordionExample2">
+    <div class="card">
+      <div class="card-header p-0" id="headingTwo">
+        
+            <div class="add-branche p-1">
+                <span>{{"Details" | translate}}</span>
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('table')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateTableIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample2">
+        <div class="container">
+            <div class="py-2">
+                <div class="card">
+                    <p-table
+                        #dt
+                        [value]="users"
+                        dataKey="id"
+                        [rows]="10"
+                        [showCurrentPageReport]="true"
+                        [rowsPerPageOptions]="[10, 25, 50]"
+                        [totalRecords]="totalNumberOfUsers"
+                        [loading]="loading"
+                        [paginator]="true"
+                        editMode="row" 
+                        selectionMode="single"
+                        [lazy]="true"
+                        (onLazyLoad)="paginate($event)"
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+                       
+                        styleClass="p-datatable-gridlines"
+                        >
+                        <!-- <ng-template pTemplate="caption">
+                            <div class="flex">
+                                <span class="p-input-icon-left ml-auto">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />`
+                                </span>
+                            </div>
+                        </ng-template> -->
+                        <ng-template pTemplate="header">
+                            
+                            <tr>
+                            
+                                <th style="min-width:7rem">
+                                    <div class="flex align-items-center">
+                                      {{"FirstName"| translate}}
+                                        <p-columnFilter type="text" field="firstName" display="menu" 
+                                        [showOperator]="false" 
+                                        
+                                        [showAddButton]="false" 
+                                        [showMatchModes]="false"
+                                        
+                                        ></p-columnFilter>
+                                    </div>
+                                    </th>
+                                    <th style="min-width:7rem">
+                                        <div class="flex align-items-center">
+                                            {{"LastName"| translate}}
+                                            <p-columnFilter type="text" field="lastName" display="menu" 
+                                            [showOperator]="false" 
+                                            
+                                            [showAddButton]="false" 
+                                            [showMatchModes]="false"
+                                            
+                                            ></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <th style="min-width:6rem">
+                                        <div class="flex align-items-center">
+                                            {{"UserStatus"| translate}}
+                                            <p-columnFilter field="userStatus" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                                                <ng-template pTemplate="header">
+                                                    <div class="px-3 pt-3 pb-0">
+                                                        <span class="font-bold">{{"Select Status"}}</span>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                                    <p-dropdown   [options]="userStatus" placeholder="select" (onChange)="filter($event)" optionLabel="label">
+                                                        
+                                                    </p-dropdown>
+                                                   
+                                                </ng-template>
+                                            </p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <th style="min-width:6rem">
+                                        <div class="flex align-items-center">
+                                            {{"UserType"| translate}}
+                                            <!-- <p-columnFilter type="text" field="userTypeName" display="menu"></p-columnFilter> -->
+                                        </div>
+                                        </th>
+                                   
+
+
+
+                                <!-- <th>
+                                    <p-columnFilter type="text" field="uniteStatus"></p-columnFilter>
+                                </th> -->
+                                
+                                <!-- <th style="min-width:7rem">
+                                    <div class="flex align-items-center">
+                                        Email
+                                        <p-columnFilter type="text" field="email" display="menu"
+                                        [showOperator]="false" 
+                                        
+                                        [showAddButton]="false" 
+                                        [showMatchModes]="false"
+                                        
+                                        ></p-columnFilter>
+                                    </div>
+                                    </th> -->
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="uniteTypeName"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:7rem">
+                                        <div class="flex align-items-center">
+                                            {{"PhoneNumber" | translate}}
+                                            <p-columnFilter type="text" field="phoneNumber" display="menu"
+                                            [showOperator]="false" 
+                                        
+                                            [showAddButton]="false" 
+                                            [showMatchModes]="false"
+                                            ></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="nationalId"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:7rem">
+                                        <div class="flex align-items-center">
+                                            {{"UniteCode" | translate}}
+                                            <p-columnFilter type="text" field="uniteCode" display="menu"
+                                            [showOperator]="false" 
+                                        
+                                            [showAddButton]="false" 
+                                            [showMatchModes]="false"
+                                            ></p-columnFilter>
+                                        </div>
+                                        </th>
+                                        <th style="min-width:7rem">
+                                            <div class="flex align-items-center">
+                                                
+                                                {{"UniteStatus" | translate}}
+                                                <p-columnFilter type="boolean" field="uniteStatus" display="menu"></p-columnFilter>
+                                            </div>
+                                            </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="passportId"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:7rem">
+                                        <div class="flex align-items-center">
+                                            {{"OwnerNationalId" | translate}}
+                                            
+                                            <p-columnFilter
+                                             type="text" field="nationalId" display="menu"
+                                             [showOperator]="false" 
+                                        
+                                             [showAddButton]="false" 
+                                             [showMatchModes]="false"
+                                             ></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="blockNumber"></p-columnFilter>
+                                    </th> -->
+                                  
+                                    
+                                        <th style="min-width:12rem">
+                                            <div class="flex align-items-center">
+                                              
+                                                {{"CreatedDate" | translate}}
+                                                <p-columnFilter type="date" field="createdDate" display="menu"
+                                                [showOperator]="false" 
+                                        
+                                                [showAddButton]="false" 
+                                                [showMatchModes]="false"
+                                                ></p-columnFilter>
+                                            </div>
+                                            </th>
+                                        <th style="min-width:8rem" *ngIf="isAdmin()">{{"Actions" | translate}}</th>
+                                 
+                                    
+                                
+                               
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-user>
+                            <tr>
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.id}}</span>
+                                </td> -->
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.firstName}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.lastName}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{user.userStatus}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{user.userTypeName}}</span>
+                                </td>
+                                
+                                
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.email }}</span>
+                                </td> -->
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.phoneNumber }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.uniteCode }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.uniteStatus }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.nationalId}}</span>
+                                </td>
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.passportId }}</span>
+                                </td> -->
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.createdDate}}</span>
+                                </td>
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.blockNumber }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.blockCode }}</span>
+                                </td> -->
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ user.isOccupied}}</span>
+                                </td>
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ unite.isEgyption}}</span>
+                                </td> -->
+                              
+                               
+                            </tr>
+                        </ng-template>
+                         
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="12" class="text-center">No Data Found</td>
+                            </tr>
+                        </ng-template>
+                         <!-- ----------------Edit Cells --------------->
+                         <ng-template pTemplate="body" let-user let-editing="editing" let-ri="rowIndex">
+                           
+                            <tr [pEditableRow]="user">
+                                <!-- <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="user.id" disabled>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.id}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td> -->
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="user.firstName" disabled> 
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.firstName}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="user.lastName" disabled> 
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.lastName}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                       
+                                        <ng-template pTemplate="input">
+                                            <select class="form-control" [(ngModel)]="user.userStatus">
+                                                <option [disabled]="Status.value ==3"  [value]="Status.label"  *ngFor="let Status of userStatus" [selected]="Status.label==user.userStatus?true:null">
+                                                   {{Status.label}}
+                                                </option> 
+                                                <!-- <ng-container *ngFor="let Status of userStatus; let x = index">
+                                                    <option *ngIf="Status.value!=3" [value]="Status.value" selected="Status.label==user.userStatus?true:null">{{Status.label}}</option>
+                                                </ng-container> -->
+                                            </select>
+                                           
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.userStatus}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <!-- <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="unite.uniteStatus">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{unite.uniteStatus}}
+                                        </ng-template> -->
+                                        <ng-template pTemplate="input">
+                                            <select class="form-control" [(ngModel)]="user.userTypeName">
+                                                <option [value]="userType.label" *ngFor="let userType of userTypes" >
+                                                 {{userType.label}}
+                                             </option> 
+                                         </select>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.userTypeName}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                               
+                                <!-- <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="user.email" disabled>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.email}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td> -->
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="user.phoneNumber">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.phoneNumber}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="user.uniteCode" disabled>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.uniteCode}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="user.uniteStatus" disabled>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.uniteStatus}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="user.nationalId">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.nationalId}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <!-- <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="user.passportId">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.passportId}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td> -->
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="user.createdDate" disabled>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{user.createdDate}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                              
+                               
+                               
+                                
+                               
+                                
+                            <td *ngIf="isAdmin()">
+                                <!-- <div class="row">
+                                    <div class="flex align-items-center justify-content-center gap-2 col-md-4">
+                                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow  (click)="onRowEditInit(user)" class="p-button-rounded p-button-text">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                       
+                                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow (click)="onRowEditSave(user)" class="p-button-rounded p-button-text p-button-success mr-2">
+                                            <i class="fa-solid fa-check"></i>
+                                        </button>
+                                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow  (click)="onRowEditCancel(user, ri)" class="p-button-rounded p-button-text p-button-danger">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="cold-md-4 m-auto">
+                                        <button class="btn-none">
+                                            <i class="fa-solid fa-trash text-danger"  (click)="confirmDelete(user.userName,user.id,ri)"></i>
+       
+                                           </button>
+                                    </div>
+                                </div> -->
+                               
+
+                                <div class="row">
+                                   
+                                    
+                                    <div class="flex align-items-center justify-content-center  col-md-4 mr-1">
+                                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow  (click)="onRowEditInit(user)" class="p-button-rounded p-button-text">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                       
+                                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow (click)="onRowEditSave(user)" class="p-button-rounded p-button-text p-button-success mr-2">
+                                            <i class="fa-solid fa-check"></i>
+                                        </button>
+                                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow  (click)="onRowEditCancel(user, ri)" class="p-button-rounded p-button-text p-button-danger">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-5 m-auto">
+                                        <button class="btn-none">
+                                            <i class="fa-solid fa-trash text-danger" (click)="confirmDelete(user.userName,user.id,ri)"></i>
+       
+                                           </button>
+                                    </div>
+                                </div>
+                              
+                            </td>
+                           
+                              
+                           
+                           
+                            
+                            </tr>
+                         
+                        </ng-template>
+
+                    </p-table>
+                </div>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
+
+
+

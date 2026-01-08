@@ -1,0 +1,724 @@
+<div class="accordion my-3" id="accordionExample">
+  <div class="card">
+    <div class="card-header p-0" id="headingOne">
+      <div class="add-branche p-1">
+        <span>{{ "CreateUnites" |translate }} </span>
+        <span class="text-warning"
+          >{{ "messages.CreateUniteWarningMessage" |translate }}</span
+        >
+      </div>
+      <div class="add-button">
+        <button
+          class="btn-none"
+          type="button"
+          data-toggle="collapse"
+          data-target="#collapseOne"
+          aria-expanded="true"
+          aria-controls="collapseTwo"
+          (click)="slideToggle('add')"
+        >
+          <i
+            class="fas fa-angle-up"
+            [ngClass]="rotateAddIcon ? 'icon-down' : ''"
+          ></i>
+          <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+        </button>
+      </div>
+    </div>
+
+    <div
+      id="collapseOne"
+      class="collapse show"
+      aria-labelledby="headingOne"
+      data-parent="#accordionExample"
+    >
+      <div class="col-md-12 m-auto">
+        <div class="col-12 py-2 m-0">
+          <form
+            action=""
+            [formGroup]="uniteFormGroup"
+            (ngSubmit)="createUnite()"
+          >
+            <div class="row">
+              <div class="col-md-12 col-xs-12 col-12">
+                <div class="row">
+                  <div class="col-md-3 col-sm-12 col-12 my-2">
+                    <label for="">{{ "UniteCode"| translate  }}</label
+                    ><strong class="required">*</strong>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{ 'UniteCode' |translate }}"
+                      formControlName="uniteCode"
+                    />
+                    <div class="alert" *ngIf="pattrenValidation('uniteCode')">
+                                        <p class="alert alert-danger">InvalidUniteType</p>
+                                    </div>
+                  </div>
+                  <div class="col-md-2 col-sm-12 col-12 my-2">
+                    <label for="">{{ "Area" | translate}}</label
+                    ><strong class="required">*</strong>
+                    <input
+                      type="number"
+                      class="form-control"
+                      placeholder="{{ 'UniteArea'| translate }}"
+                      formControlName="area"
+                    />
+                    <!-- <div class="alert" *ngIf="pattrenValidation('uniteCode')">
+                                        <p class="alert alert-danger">InvalidUniteType</p>
+                                    </div> -->
+                  </div>
+
+                  <div class="col-md-3 col-sm-12 col-12 my-2">
+                    <label for="" class="">{{ "OwnerNationalId" |translate}}</label>
+                    <strong class="required" *ngIf="isOccupied()">*</strong>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{ 'NationalId' | translate }}"
+                      formControlName="nationalId"
+                    />
+                    <div class="alert" *ngIf="pattrenValidation('nationalId')">
+                      <p class="alert alert-danger">
+                       {{"error.InvaidFiled"| translate}}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="col-md-3 my-2">
+                    <label for="">{{ "SelectBlock" | translate }}</label>
+                    <strong class="required">*</strong>
+
+                    <ng-autocomplete
+                      #auto
+                      [data]="blocks"
+                      [searchKeyword]="keyword"
+                      placeholder="{{'BlockCode'| translate}}"
+                      (selected)="selectEvent($event)"
+                      (inputChanged)="onChangeSearch($event)"
+                      (inputFocused)="onFocused($event)"
+                      [isLoading]="blockLoading"
+                      [itemTemplate]="itemTemplate"
+                      [notFoundTemplate]="notFoundTemplate"
+                    >
+                    </ng-autocomplete>
+
+                    <ng-template #itemTemplate let-item>
+                      <a [innerHTML]="item.diplayName"></a>
+                      <!-- <a [innerHTML]="item.code"></a> -->
+                    </ng-template>
+
+                    <ng-template #notFoundTemplate let-notFound>
+                      <div [innerHTML]="notFound"></div>
+                    </ng-template>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="">{{ "UniteStatus" |translate }}</label>
+                    <strong class="required">*</strong>
+                    <select class="form-control" formControlName="uniteStatus">
+                      <option value="null">{{ "Select"  | translate}}</option>
+                      <option
+                        [value]="item.value"
+                        *ngFor="let item of unitesStatus"
+                      >
+                        {{ item.label }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-md-7 row">
+                    <div class="col-md-5">
+                      <label for="">{{ "UniteType" |translate }}</label>
+                      <strong class="required">*</strong>
+                      <select
+                        class="form-control"
+                        formControlName="uniteTypeId"
+                      >
+                        <option value="null">{{ "Select"  | translate}}</option>
+                        <option
+                          [value]="uniteType.id"
+                          *ngFor="let uniteType of uniteTypes"
+                        >
+                          {{ uniteType.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 my-auto mx-2">
+                      <div class="form-check m-auto ">
+                          <input type="checkbox" class="form-check-input" id="exampleCheck1" formControlName="isOccupied">
+                          <label class="form-check-label " for="exampleCheck1" >{{"IsOccupied" | translate}}</label>
+                        </div>
+                  </div>
+
+                    <div class="col-md-3 py-2 col-sm-12 col-12 mt-4">
+                      <button
+                        class="btn px-4 w-100"
+                        type="submit"
+                        [disabled]="!isValid()"
+                      >
+                        {{ "Save" |translate }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--------------- Unite Table------------------  -->
+  <div class="accordion my-3" id="accordionExample2">
+    <div class="card">
+      <div class="card-header p-0" id="headingTwo">
+        <div class="add-branche p-1">
+          <span>{{"Details" | translate}}</span>
+        </div>
+        <div class="add-button">
+          <button
+            class="btn-none"
+            type="button"
+            data-toggle="collapse"
+            data-target="#collapseTwo"
+            aria-expanded="true"
+            aria-controls="collapseTwo"
+            (click)="slideToggle('table')"
+          >
+            <i
+              class="fas fa-angle-up"
+              [ngClass]="rotateTableIcon ? 'icon-down' : ''"
+            ></i>
+            <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+          </button>
+        </div>
+      </div>
+      <!-- [rowsPerPageOptions]="[2, 4, 50]" -->
+      <div
+        id="collapseTwo"
+        class="collapse show"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionExample2"
+      >
+        <div class="col-md-12">
+          <div class="w-100 py-2 m-0">
+            <div class="card">
+              <!-- <p-paginator [rows]="10"  [totalRecords]="'7'" (onPageChange)="paginate($event)"></p-paginator> -->
+
+              <p-table
+                #dt
+                [value]="unites"
+                dataKey="id"
+                [rows]="10"
+                [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[10, 25, 50]"
+                [loading]="loading"
+                [paginator]="true"
+                editMode="row"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [globalFilterFields]="[
+                  'name',
+                  'country.name',
+                  'representative.name',
+                  'status'
+                ]"
+                [lazy]="true"
+                (onLazyLoad)="paginate($event)"
+                styleClass="p-datatable-gridlines"
+                selectionMode="single"
+                [totalRecords]="totalNumberOfUnites"
+                [responsive]="true"
+              >
+                <!-- <ng-template pTemplate="caption">
+                            <div class="flex">
+                                <span class="p-input-icon-left ml-auto">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />`
+                                </span>
+                            </div>
+                        </ng-template> -->
+                <ng-template pTemplate="header">
+                  <tr>
+                    <!-- <th>
+                                    <p-columnFilter type="text" field="id"></p-columnFilter>
+                                </th> -->
+                    <th style="min-width: 5rem">
+                      <div class="flex align-items-center">
+                        ID
+                        <p-columnFilter
+                          type="text"
+                          field="id"
+                          display="menu"
+                          [showOperator]="false"
+                          [showAddButton]="false"
+                          [showMatchModes]="false"
+                        ></p-columnFilter>
+                      </div>
+                    </th>
+                    <!-- <th>
+                                    <p-columnFilter type="text" field="uniteCode"></p-columnFilter>
+                                </th> -->
+                    <th style="min-width: 5rem">
+                      <div class="flex align-items-center">
+                        {{"UniteCode" | translate}}
+                        <p-columnFilter
+                          type="text"
+                          field="uniteCode"
+                          display="menu"
+                          [showOperator]="false"
+                          [showAddButton]="false"
+                          [showMatchModes]="false"
+                        >
+                        </p-columnFilter>
+                      </div>
+                    </th>
+                    <th style="min-width: 7rem">
+                      <div class="flex align-items-center">
+                        {{"UniteStatus" | translate}}
+                        <p-columnFilter field="uniteStatus" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                            <ng-template pTemplate="header">
+                                <div class="px-3 pt-3 pb-0">
+                                    <span class="font-bold">{{"Select" | translate}}</span>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                <p-dropdown   [options]="unitesStatus" placeholder="Select" (onChange)="filter($event)" optionLabel="label">
+                                    
+                                </p-dropdown>
+                                <!-- <select class="form-control" optionLabel="name"  [ngModel]="value" (onChange)="filter($event)"  >
+                                 <option value="s1">select</option>
+                                 <option value="s2">select</option>
+                                </select> -->
+                            </ng-template>
+                        </p-columnFilter>
+                      </div>
+                    </th>
+
+                    <!-- <th>
+                                    <p-columnFilter type="text" field="uniteStatus"></p-columnFilter>
+                                </th> -->
+
+                    <th style="min-width: 7rem">
+                      <div class="flex align-items-center">
+                        {{"UniteType" | translate}}
+                        <p-columnFilter
+                          type="text"
+                          field="uniteTypeName"
+                          display="menu"
+                          [showOperator]="false" 
+                                        
+                          [showAddButton]="false" 
+                          [showMatchModes]="false"
+                        ></p-columnFilter>
+                      </div>
+                    </th>
+                    <th style="min-width: 5rem">
+                        <div class="flex align-items-center">
+                          {{"Area" |translate}}
+                          <p-columnFilter
+                            type="text"
+                            field="area"
+                            display="menu"
+                            [showOperator]="false" 
+                                          
+                            [showAddButton]="false" 
+                            [showMatchModes]="false"
+                          ></p-columnFilter>
+                        </div>
+                      </th>
+                    <!-- <th>
+                                        <p-columnFilter type="text" field="uniteTypeName"></p-columnFilter>
+                                    </th> -->
+                    <th style="min-width: 7rem">
+                      <div class="flex align-items-center">
+                        {{"OwnerNationalId" | translate}}
+                        <p-columnFilter
+                          type="text"
+                          field="nationalId"
+                          display="menu"
+                          [showOperator]="false" 
+                                        
+                          [showAddButton]="false" 
+                          [showMatchModes]="false"
+                        ></p-columnFilter>
+                      </div>
+                    </th>
+                    <!-- <th>
+                                        <p-columnFilter type="text" field="nationalId"></p-columnFilter>
+                                    </th> -->
+                    <!-- <th style="min-width:7rem">
+                                        <div class="flex align-items-center">
+                                          Owner PassportId
+                                            <p-columnFilter type="text" field="passportId" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th> -->
+                    <!-- <th>
+                                        <p-columnFilter type="text" field="passportId"></p-columnFilter>
+                                    </th> -->
+                    <th style="min-width: 5rem">
+                      <div class="flex align-items-center">
+                        {{"BlockNumber" | translate}}
+                        <p-columnFilter
+                          type="text"
+                          field="blockNumber"
+                          display="menu"
+                          [showOperator]="false" 
+                                        
+                          [showAddButton]="false" 
+                          [showMatchModes]="false"
+                        ></p-columnFilter>
+                      </div>
+                    </th>
+                    <!-- <th>
+                                        <p-columnFilter type="text" field="blockNumber"></p-columnFilter>
+                                    </th> -->
+                    <th style="min-width: 7rem">
+                      <div class="flex align-items-center">
+                        {{"BlockCode" | translate}}
+                        <p-columnFilter
+                          type="text"
+                          field="blockCode"
+                          display="menu"
+                          [showOperator]="false" 
+                                        
+                          [showAddButton]="false" 
+                          [showMatchModes]="false"
+                        ></p-columnFilter>
+                      </div>
+                    </th>
+
+                    <th style="min-width: 7rem">
+                      <div class="flex align-items-center">
+                        {{"IsOccupied" | translate}}
+                        <p-columnFilter
+                          type="boolean"
+                          field="isOccupied"
+                        ></p-columnFilter>
+                      </div>
+                    </th>
+                    <th>  {{"Actions" | translate}}</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-unite>
+                  <tr>
+                    <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        unite.id
+                      }}</span>
+                    </td>
+                    <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        unite.uniteCode
+                      }}</span>
+                    </td>
+                    <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        unite.uniteStatus
+                      }}</span>
+                    </td>
+                    <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        unite.uniteTypeName
+                      }}</span>
+                    </td>
+                    <td>
+                        <span class="ml-1 vertical-align-middle">{{
+                          unite.area
+                        }}</span>
+                      </td>
+
+                    <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        unite.nationalId
+                      }}</span>
+                    </td>
+                    <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ unite.passportId }}</span>
+                                </td> -->
+                    <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        unite.blockNumber
+                      }}</span>
+                    </td>
+                    <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        unite.blockCode
+                      }}</span>
+                    </td>
+                    <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        unite.isOccupied
+                      }}</span>
+                      <!-- <input type="checkbox" class="form-check-input" id="exampleCheck1" [value]="unite.isOccupied" > -->
+                    </td>
+                    <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ unite.isEgyption}}</span>
+                                </td> -->
+                  </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="10" class="text-center">{{"messages.NoDatafound" | translate}}</td>
+                  </tr>
+                </ng-template>
+                <!-- ----------------Edit Cells --------------->
+                <ng-template
+                  pTemplate="body"
+                  let-unite
+                  let-editing="editing"
+                  let-ri="rowIndex"
+                >
+                  <tr [pEditableRow]="unite">
+                    <td>
+                      <p-cellEditor>
+                        <ng-template pTemplate="input">
+                          <input
+                            pInputText
+                            type="text"
+                            [(ngModel)]="unite.id"
+                            disabled
+                          />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          {{ unite.id }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                    <td>
+                      <p-cellEditor>
+                        <ng-template pTemplate="input">
+                          <input
+                            pInputText
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="unite.uniteCode"
+                          />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          {{ unite.uniteCode }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                    <td>
+                      <p-cellEditor>
+                        <!-- <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="unite.uniteStatus">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{unite.uniteStatus}}
+                                        </ng-template> -->
+                        <ng-template pTemplate="input">
+                          <select
+                            class="form-control"
+                            [(ngModel)]="unite.uniteStatus"
+                          >
+                            <option
+                              [value]="status.label"
+                              *ngFor="let status of unitesStatus"
+                              [selected]="
+                                status.label == unite.uniteStatus ? true : null
+                              "
+                            >
+                              {{ status.label }}
+                            </option>
+                          </select>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          {{ unite.uniteStatus }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                    <td>
+                      <p-cellEditor>
+                        <!-- <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="unite.uniteStatus">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{unite.uniteStatus}}
+                                        </ng-template> -->
+                        <ng-template pTemplate="input">
+                          <select
+                            class="form-control"
+                            [(ngModel)]="unite.uniteTypeId"
+                          >
+                            <option
+                              [value]="uniteType.id"
+                              *ngFor="let uniteType of uniteTypes"
+                              [selected]="
+                                uniteType.id == unite.uniteTypeId ? true : null
+                              "
+                            >
+                              {{ uniteType.name }}
+                            </option>
+                          </select>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          {{ unite.uniteTypeName }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+
+                    <td>
+                        <p-cellEditor>
+                          <ng-template pTemplate="input">
+                            <input
+                              pInputText
+                              type="number"
+                              class="form-control"
+                              [(ngModel)]="unite.area"
+                            />
+                          </ng-template>
+                          <ng-template pTemplate="output">
+                            {{ unite.area }}
+                          </ng-template>
+                        </p-cellEditor>
+                      </td>
+                    <td>
+                      <p-cellEditor>
+                        <ng-template pTemplate="input">
+                          <input
+                            pInputText
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="unite.nationalId"
+                          />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          {{ unite.nationalId }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                    <!-- <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="unite.passportId">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{unite.passportId}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td> -->
+                    <td>
+                      <p-cellEditor>
+                        <ng-template pTemplate="input">
+                          <input
+                            pInputText
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="unite.blockNumber"
+                            disabled
+                          />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          {{ unite.blockNumber }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                    <td>
+                      <p-cellEditor>
+                        <ng-template pTemplate="input">
+                          <input
+                            pInputText
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="unite.blockCode"
+                            disabled
+                          />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          {{ unite.blockCode }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                    <td class="m-auto center">
+                      <p-cellEditor>
+                        <ng-template pTemplate="input">
+                          <!-- <select class="form-control" [(ngModel)]="unite.isOccupied">
+                                                <option value="true">True</option>
+                                                <option value="false">False</option>
+                                            </select> -->
+                          <p-checkbox
+                            [(ngModel)]="unite.isOccupied"
+                            [binary]="unite.isOccupied"
+                          ></p-checkbox>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          <!-- {{unite.isOccupied}} -->
+                          <input
+                            type="checkbox"
+                            class="form-check-input text-center m-auto"
+                            id="exampleCheck1"
+                            [checked]="unite.isOccupied"
+                            disabled
+                          />
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+
+                    <td>
+                      <div class="row">
+                        <div
+                          class="flex align-items-center justify-content-center gap-2 col-md-6"
+                        >
+                          <button
+                            *ngIf="!editing"
+                            pButton
+                            pRipple
+                            type="button"
+                            pInitEditableRow
+                            (click)="onRowEditInit(unite)"
+                            class="p-button-rounded p-button-text"
+                          >
+                            <i class="fa-solid fa-pen-to-square"></i>
+                          </button>
+
+                          <button
+                            *ngIf="editing"
+                            pButton
+                            pRipple
+                            type="button"
+                            pSaveEditableRow
+                            (click)="onRowEditSave(unite)"
+                            class="p-button-rounded p-button-text p-button-success mr-2"
+                          >
+                            <i class="fa-solid fa-check"></i>
+                          </button>
+                          <button
+                            *ngIf="editing"
+                            pButton
+                            pRipple
+                            type="button"
+                            pCancelEditableRow
+                            (click)="onRowEditCancel(unite, ri)"
+                            class="p-button-rounded p-button-text p-button-danger"
+                          >
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                        </div>
+                        <div class="col-md-4 m-auto">
+                          <button class="btn-none">
+                            <i
+                              class="fa-solid fa-trash text-danger"
+                              (click)="
+                                confirmDelete(
+                                  unite.uniteCode + ' ' + unite.blockNumber,
+                                  unite.id,
+                                  ri
+                                )
+                              "
+                            ></i>
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

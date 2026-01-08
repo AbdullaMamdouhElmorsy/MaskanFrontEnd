@@ -1,0 +1,434 @@
+<div class="accordion my-3" id="accordionExample">
+    <div class="card">
+      <div class="card-header p-0" id="headingOne">
+        
+            <div class="add-branche p-1">
+                <span>{{"RequestFilters" | translate}} </span>
+              
+
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('add')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateAddIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+   
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+                <form action="" [formGroup]="filterRequestFormGroup" (ngSubmit)="filterRequest()">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="">{{"CreatedDateFrom"| translate}}</label>
+                                    <span class="required"> *</span>
+                                    <p-calendar [showIcon]="true"   dateFormat="mm/dd/yy"	formControlName="CreatedDate" class="max-w-full">
+                                        </p-calendar>
+                                  
+                                </div>
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="">{{"UniteCode" | translate}}</label>
+                                    <input type="text" class="form-control" placeholder="{{'Code'| translate}}" formControlName="UniteCode"> 
+                                    <!-- <div class="alert" *ngIf="pattrenValidation('DepartmentLatinName')">
+                                        <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                                    </div> -->
+                                </div>
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="" class="">{{"PhoneNumber" | translate}}</label>
+                                    <input type="text" class="form-control"  placeholder="{{'RequesterPhoneNumber' | translate}}" formControlName="PhoneNumber"> 
+                                    <div class="alert" *ngIf="pattrenValidation('PhoneNumber')">
+                                        <p class=" alert alert-danger">Please Enter Valid Phone Number</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 my-2">
+                                    <label for="">{{"ComplainType" | translate}}</label>
+                                   
+                                    <select  class="form-control" formControlName="RequestTypeId">
+                                        <option value="null">{{"Select" | translate}}</option>
+                                        <option [value]="type.id" *ngFor="let type of requestTypes">{{type.name}}</option>
+                                    </select>
+                                  
+                                </div>
+
+                                <!-- <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="" class="">{{"Passport Id"}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'OwnerpassportId'}}" formControlName="passportId"> 
+                                    <div class="alert" *ngIf="pattrenValidation('nationalId')">
+                                        <p class=" alert alert-danger">National Id Is not InValid</p>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-3 my-2">
+                                    <label for="">{{"ComplainStatus"| translate}}</label>
+                                   
+                                    <select  class="form-control" formControlName="Status">
+                                        <option value="null">{{"Select" | translate}}</option>
+                                        <option [value]="status.value" *ngFor="let status of requestStatus">{{status.label}}</option>
+                                    </select>
+                                  
+                                </div>
+                              <div class="col-md-7 row">
+                                
+                               
+                                <div class=" col-md-3 py-2 col-sm-12 col-12 mt-4">
+                                    <button class="btn   px-4 w-100"  type="submit" 
+                                    [disabled]="!isValidFilter()"
+                                    >{{"Filter" | translate}}</button>
+                                   </div>
+                                
+                              </div>
+                              
+                             
+                              
+                           
+                                
+
+                            </div>
+                           
+                            
+                        </div>
+                        
+                      
+                    </div>
+                 
+                
+            </form>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--------------- request Table------------------  -->
+<div class="accordion my-3" id="accordionExample2">
+    <div class="card">
+      <div class="card-header p-0" id="headingTwo">
+        
+            <div class="add-branche p-1">
+                <span class="mx-2">{{"Details" | translate}}</span>
+                <button
+                type="button"
+                
+                aria-colspan=""
+                icon="pi pi-file"
+                (click)="exportexcel()"
+                
+                class=" ml-3 btn btn-outline-success bg-gray  px-4"
+                pTooltip="CSV"
+                tooltipPosition="bottom">
+                {{"Export" | translate}}
+            </button>
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('table')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateTableIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample2">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+                <div class="card">
+                    <p-table
+                        #dt2
+                        id="request-table-op"
+                        [value]="requests"
+                        dataKey="id"
+                        [rows]="10"
+                        [showCurrentPageReport]="true"
+                        [rowsPerPageOptions]="[10, 25, 50]"
+                        [loading]="loading"
+                        [paginator]="true"
+                        editMode="row" 
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+                        styleClass="p-datatable-gridlines"
+                        selectionMode="single"
+                        >
+                        <!-- <ng-template pTemplate="caption">
+                            <div class="flex">
+                                <span class="p-input-icon-left ml-auto">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />`
+                                </span>
+                            </div>
+                        </ng-template> -->
+                        <ng-template pTemplate="header">
+                            <!-- <tr>
+                                <th >Id</th>
+                                <th >Unite Id</th>
+                                <th >Unite Code</th>
+                                <th >created User</th>
+                                <th >phone Number</th>
+                                <th >complain Type</th>
+                                <th >Created Date</th>
+                              
+                                <th >Status</th>
+                                <th >Last User Action</th>
+                                 
+                               
+                                
+                            </tr> -->
+                            <tr class="">
+                                <!-- <th style="min-width:3rem">
+                                    <div class="flex align-items-center">
+                                        ID
+                                        <p-columnFilter type="text" field="id" display="menu"></p-columnFilter>
+                                    </div>
+                                    </th> -->
+                                <!-- <th>
+                                    <p-columnFilter type="text" field="id"></p-columnFilter>
+                                </th> -->
+                                <!-- <th style="min-width:3rem">
+                                    <div class="flex align-items-center">
+                                        UniteI ID
+                                        <p-columnFilter type="text" field="uniteId" display="menu"></p-columnFilter>
+                                    </div>
+                                    </th> -->
+                                <!-- <th>
+                                    <p-columnFilter type="text" field="uniteId"></p-columnFilter>
+                                </th> -->
+                                <th style="min-width:6rem">
+                                    <div class="flex align-items-center">
+                                        {{"UniteCode"| translate}}
+                                        <p-columnFilter type="text" field="uniteCode" display="menu"></p-columnFilter>
+                                    </div>
+                                    </th>
+                                <!-- <th>
+                                    <p-columnFilter type="text" field="uniteCode"></p-columnFilter>
+                                </th> -->
+                                <th style="min-width:12rem">
+                                    <div class="flex align-items-center">
+                                        
+                                        {{"CreatedUser"| translate}}
+                                        <p-columnFilter type="text" field="createdUser" display="menu"></p-columnFilter>
+                                    </div>
+                                    </th>
+                                
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="createdUser"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:12rem">
+                                        <div class="flex align-items-center">
+                                            
+                                            {{"PhoneNumber"| translate}}
+                                            <p-columnFilter type="text" field="phoneNumber" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="phoneNumber"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:9rem">
+                                        <div class="flex align-items-center">
+                                            {{"ReuqestType"| translate}}
+                                            <p-columnFilter type="text" field="RequestTypeName" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="complainType"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:15rem">
+                                        <div class="flex align-items-center">
+                                            
+                                            {{"CreatedDate"| translate}}
+                                            <p-columnFilter type="date" field="createdDate" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="date" field="createdDate"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:6rem">
+                                        <div class="flex align-items-center">
+                                            {{"Status"| translate}}
+                                            <p-columnFilter type="boolean" field="status" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="status"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:12rem">
+                                        <div class="flex align-items-center">
+                                            {{"LastUserAction"| translate}}
+                                            <p-columnFilter type="text" field="lastUserActionName" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="lastUserAction"></p-columnFilter>
+                                    </th> -->
+                                    <!-- <th colspan="2">{{"Actions" | translate}}</th> -->
+                                
+                               
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-request let-ri="rowIndex">
+                            <tr  (click)="onSelectedRow(request,ri)">
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ request.id}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ request.uniteId}}</span>
+                                </td> -->
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{request.uniteCode}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{request.createdUserName}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{request.phoneNumber}}</span>
+                                </td>
+                                
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ request.requestTypeName }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ request.createdDate }}</span>
+                                </td>
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ request.descrption }}</span>
+                                </td> -->
+                                
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ request.status }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ request.lastUserActionName }}</span>
+                                </td>
+                                
+                               
+                              
+                               
+                            </tr>
+                        </ng-template>
+                         
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="7" class="text-center">{{"messages.NoDatafound" | translate}}</td>
+                            </tr>
+                        </ng-template>
+                        
+                    </p-table>
+                </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+    
+
+<!--------------- Update Modal--------------------- -->
+<div class="modal fade " id="selectedRow" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Reqquest Details For Unite: <span class="text-info fa-1x">{{selectedRequest?.uniteCode}}</span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" [formGroup]="updateRequestFormGroup" (ngSubmit)="update()">
+            <div class="row">
+                <div class="col-md-12 col-xs-12 col-12">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-12 col-12 my-2">
+                            <label for="">{{"Unite Code"}}</label>
+                            <input type="text" class="form-control" placeholder="{{'Unite Code'}}" [value]="selectedRequest?.uniteCode" disabled> 
+                            <!-- <div class="alert" *ngIf="pattrenValidation('DepartmentLatinName')">
+                                <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                            </div> -->
+                        </div>
+                    
+                        <div class="col-md-4 col-sm-12 col-12 my-2">
+                            <label for="" class="">{{"Created User"}}</label>
+                            <input type="text" class="form-control" [value]="selectedRequest?.createdUserName" disabled>  
+                            <!-- <div class="alert" *ngIf="pattrenValidation('nationalId')">
+                                <p class=" alert alert-danger">National Id Is not InValid</p>
+                            </div> -->
+                        </div>
+                        <div class="col-md-5 col-sm-12 col-12 my-2">
+                            <label for="" class="">{{"Created User Phone Number"}}</label>
+                            <input type="text" class="form-control" [value]="selectedRequest?.phoneNumber" disabled> 
+                            
+                        </div>
+
+                        
+                     
+                       
+                        <div class="col-md-12 p-0 m-0">
+                            <div class="card-header px-2 py-2 rounded">{{"Descrption"}}</div>
+                            <h6 class="card bg-secondary p-3">
+                                {{selectedRequest?.descrption}}
+                            </h6>
+
+                        </div>
+                       
+                        <div class="col-md-2 my-2">
+                            <label for="">{{"Request Status"}}</label>
+                            
+                            <select  class="form-control" formControlName="status" (change)="isSolved()">
+                               
+                                <option [value]="status.value" [selected]="status.label==selectedRequest?.status?true:null" *ngFor="let status of requestStatus">{{status.label}}</option>
+                            </select>
+                          
+                        </div>
+                        <div class="col-md-7 col-sm-12 col-12 my-2" >
+                            <label for="" class="">{{"Comment"}}</label>
+                              <textarea class="form-control" formControlName="comment">
+                                {{selectedRequest?.comment}}
+                              </textarea>                            
+                        </div>
+                     
+                       
+                        
+                      
+                      
+                     
+                      
+                   
+                        
+
+                    </div>
+                   
+                    
+                </div>
+                
+              
+            </div>
+         
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{"Close"| translate}}</button>
+                <button type="submit" class="btn  btn-success" [disabled]="!isValid()">{{"Save" | translate}}</button>
+              </div>
+    </form>
+      </div>
+      
+    </div>
+  </div>
+</div>

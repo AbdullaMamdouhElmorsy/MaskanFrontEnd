@@ -1,0 +1,450 @@
+<div class="accordion my-3" id="accordionExample">
+    <div class="card">
+      <div class="card-header p-0" id="headingOne">
+        
+            <div class="add-branche p-1">
+                <span>{{"ComplainFilter" | translate}} </span>
+              
+
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('add')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateAddIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+   
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+                <form action="" [formGroup]="ComplainFitlerFormGroup" (ngSubmit)="get_FilterdComplain()">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="">{{"CreatedDateFrom" | translate}}</label>
+                                    <span class="required"> *</span>
+                                    <p-calendar [showIcon]="true"
+                                    
+                                    dateFormat="mm/dd/yy"	
+                                    formControlName="CreatedDate"
+                                     class="max-w-full">
+                                        
+                                    </p-calendar>
+                                  
+                                </div>
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="">{{"UniteCode" | translate}}</label>
+                                    <input type="text" class="form-control" placeholder="{{'Code'| translate}}" formControlName="UniteCode"> 
+                                    <!-- <div class="alert" *ngIf="pattrenValidation('DepartmentLatinName')">
+                                        <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                                    </div> -->
+                                </div>
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="" class="">{{"PhoneNumber" | translate}}</label>
+                                    <input type="text" class="form-control" placeholder="{{'ComplainerPhoneNumber' | translate}}" formControlName="PhoneNumber"> 
+                                    <div class="alert" *ngIf="pattrenValidation('PhoneNumber')">
+                                        <p class=" alert alert-danger">{{"messages.InvalidNumber"}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 my-2">
+                                    <label for="">{{"ComplainType" | translate}}</label>
+                                   
+                                    <select  class="form-control" formControlName="ComplainTypeId">
+                                        <option value="null">{{"Select"| translate}}</option>
+                                        <option [value]="type.id" *ngFor="let type of complaintypes">{{type.name}}</option>
+                                    </select>
+                                  
+                                </div>
+
+                                <!-- <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="" class="">{{"Passport Id"}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'OwnerpassportId'}}" formControlName="passportId"> 
+                                    <div class="alert" *ngIf="pattrenValidation('nationalId')">
+                                        <p class=" alert alert-danger">National Id Is not InValid</p>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-3 my-2">
+                                    <label for="">{{"ComplainStatus" | translate}}</label>
+                                   
+                                    <select  class="form-control" formControlName="Status">
+                                        <option value="null">{{"Select" |translate}}</option>
+                                        <option [value]="status.value" *ngFor="let status of complainsStatus">{{status.label}}</option>
+                                    </select>
+                                  
+                                </div>
+                              <div class="col-md-7 row">
+                                
+                               
+                                <div class=" col-md-3 py-2 col-sm-12 col-12 mt-4">
+                                    <button class="btn   bpx-4 w-100 save-button"  type="submit" 
+                                    [disabled]="!isValidFilter()"
+                                    >{{"Filter" | translate}}</button>
+                                   </div>
+                                
+                              </div>
+                              
+                             
+                              
+                           
+                                
+
+                            </div>
+                           
+                            
+                        </div>
+                        
+                      
+                    </div>
+                 
+                
+            </form>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
+
+
+
+
+<!--------------- complaion Table------------------  -->
+<div class="accordion my-3" id="accordionExample2">
+    <div class="card">
+      <div class="card-header p-0" id="headingTwo">
+        
+            <div class="add-branche p-1">
+                <span class="mx-2">{{"Details" |translate}}</span>
+                <button
+                type="button"
+                
+                aria-colspan=""
+                icon="pi pi-file"
+                (click)="exportexcel()"
+                
+                class=" ml-3 btn btn-outline-success bg-gray  px-4"
+                pTooltip="CSV"
+                tooltipPosition="bottom">
+                {{"Export" | translate}}
+            </button>
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('table')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateTableIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample2">
+        <div class="col-md-12 m-auto">
+            <div class=" py-2 m-0">
+                <div class="card">
+                    <p-table
+                    id="complain-table-op"
+                        #dt2
+                        [value]="complaions"
+                        dataKey="id"
+                        [rows]="10"
+                        [showCurrentPageReport]="true"
+                        [rowsPerPageOptions]="[10, 25, 50]"
+                        [loading]="loading"
+                        [paginator]="true"
+                        editMode="row" 
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                      
+                        styleClass="p-datatable-gridlines"
+                        selectionMode="single"
+                        >
+                        <!-- <ng-template pTemplate="caption">
+                            <div class="flex">
+                                <span class="p-input-icon-left ml-auto">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />`
+                                </span>
+                            </div>
+                        </ng-template> -->
+                        <ng-template pTemplate="header">
+                            <!-- <tr>
+                                <th >Id</th>
+                                <th >Unite Id</th>
+                                <th >Unite Code</th>
+                                <th >created User</th>
+                                <th >phone Number</th>
+                                <th >complain Type</th>
+                                <th >Created Date</th>
+                              
+                                <th >Status</th>
+                                <th >Last User Action</th>
+                                 
+                               
+                                
+                            </tr> -->
+                            <tr class="">
+                                <th style="min-width:3rem">
+                                    <div class="flex align-items-center">
+                                        ID
+                                        <p-columnFilter type="text" field="id" display="menu"></p-columnFilter>
+                                    </div>
+                                    </th>
+                                <!-- <th>
+                                    <p-columnFilter type="text" field="id"></p-columnFilter>
+                                </th> -->
+                                <th style="min-width:2rem">
+                                    <div class="flex align-items-center">
+                                       {{"UniteId"|translate}} 
+                                         <p-columnFilter type="text" field="uniteId" display="menu"></p-columnFilter>
+                                    </div>
+                                    </th>
+                                <!-- <th>
+                                    <p-columnFilter type="text" field="uniteId"></p-columnFilter>
+                                </th> -->
+                                <th style="min-width:3rem">
+                                    <div class="flex align-items-center">
+                                        
+                                        {{"UniteCode"|translate}} 
+                                        <p-columnFilter type="text" field="uniteCode" display="menu"></p-columnFilter>
+                                    </div>
+                                    </th>
+                                <!-- <th>
+                                    <p-columnFilter type="text" field="uniteCode"></p-columnFilter>
+                                </th> -->
+                                <th style="min-width:11rem">
+                                    <div class="flex align-items-center">
+                                        
+                                        {{"CreatedUser"|translate}} 
+                                        <p-columnFilter type="text" field="createdUser" display="menu"></p-columnFilter>
+                                    </div>
+                                    </th>
+                                
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="createdUser"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:12rem">
+                                        <div class="flex align-items-center">
+                                            
+                                            {{"PhoneNumber"|translate}} 
+                                            <p-columnFilter type="text" field="phoneNumber" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="phoneNumber"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:7rem">
+                                        <div class="flex align-items-center">
+                                            {{"ComplainType"|translate}} 
+                                            <p-columnFilter type="text" field="complainType" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="complainType"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:12rem">
+                                        <div class="flex align-items-center">
+                                            {{"CreatedDate"|translate}} 
+                                            
+                                            <p-columnFilter type="date" field="createdDate" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="date" field="createdDate"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:6rem">
+                                        <div class="flex align-items-center">
+                                            {{"Status"|translate}} 
+                                            <p-columnFilter type="boolean" field="status" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="status"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:12rem">
+                                        <div class="flex align-items-center">
+                                            {{"LastUserAction"|translate}} 
+                                            
+                                            <p-columnFilter type="text" field="lastUserAction" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="lastUserAction"></p-columnFilter>
+                                    </th> -->
+                                    <!-- <th colspan="2">{{"Actions" | translate}}</th> -->
+                                
+                               
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-complaion let-ri="rowIndex">
+                            <tr  (click)="onSelectedRow(complaion,ri)">
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ complaion.id}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ complaion.uniteId}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{complaion.uniteCode}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{complaion.createdUser}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{complaion.phoneNumber}}</span>
+                                </td>
+                                
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ complaion.complainType }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ complaion.createdDate }}</span>
+                                </td>
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ complaion.descrption }}</span>
+                                </td> -->
+                                
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ complaion.status }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ complaion.lastUserAction }}</span>
+                                </td>
+                                
+                               
+                              
+                               
+                            </tr>
+                        </ng-template>
+                         
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="9" class="text-center">{{"messages.NoDatafound" | translate}}</td>
+                            </tr>
+                        </ng-template>
+                        
+                    </p-table>
+                </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+    
+
+<!--------------- Update Modal--------------------- -->
+<div class="modal fade " id="selectedRow" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> {{"Details"}} <span class="text-info fa-1x">{{selectedComplain?.id}}</span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="" [formGroup]="updateComplainFormGroup" (ngSubmit)="updateComplain()">
+            <div class="row">
+                <div class="col-md-12 col-xs-12 col-12">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-12 col-12 my-2">
+                            <label for="">{{"UniteCode"|translate}}</label>
+                            <input type="text" class="form-control" placeholder="{{'UniteCode'|translate}}" [value]="selectedComplain?.uniteCode" disabled> 
+                            <!-- <div class="alert" *ngIf="pattrenValidation('DepartmentLatinName')">
+                                <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                            </div> -->
+                        </div>
+                    
+                        <div class="col-md-4 col-sm-12 col-12 my-2">
+                            <label for="" class="">{{"CreatedUser"|translate}}</label>
+                            <input type="text" class="form-control" [value]="selectedComplain?.createdUser" disabled>  
+                            <!-- <div class="alert" *ngIf="pattrenValidation('nationalId')">
+                                <p class=" alert alert-danger">National Id Is not InValid</p>
+                            </div> -->
+                        </div>
+                        <div class="col-md-5 col-sm-12 col-12 my-2">
+                            <label for="" class="">{{"CreatedUserPhoneNumber"|translate}}</label>
+                            <input type="text" class="form-control" [value]="selectedComplain?.phoneNumber" disabled> 
+                            
+                        </div>
+
+                        
+                     
+                       
+                        <div class="col-md-12">
+                            <div class="card-header px-3 py-1 rounded"><span>{{"Descrption"|translate}}</span> </div>
+                            <h6 class="card bg-secondary p-3">
+                                {{selectedComplain?.descrption}}
+                            </h6>
+
+                        </div>
+                        <div class="col-md-3 my-2">
+                            <label for="">{{"ComplainType"|translate}}</label>
+                            <!-- <strong class="required">*</strong> -->
+                            <select  class="form-control" formControlName="complainTypeId">
+                                <option [value]="complaintype.id" 
+                                *ngFor="let complaintype of complaintypes"
+                                [selected]="complaintype.id==selectedComplain?.complainTypeId?true:null"
+                                >
+                                    
+                                    {{complaintype.name}}</option>
+                            </select>
+                          
+                        </div>
+                        <div class="col-md-2 my-2">
+                            <label for="">{{"ComplainStatus"| translate}}</label>
+                            
+                            <select  class="form-control" formControlName="status" (change)="isSolved()">
+                               
+                                <option [value]="complainStatus.value" [selected]="complainStatus.label==selectedComplain?.status?true:null" *ngFor="let complainStatus of complainsStatus">{{complainStatus.label}}</option>
+                            </select>
+                          
+                        </div>
+                        <div class="col-md-7 col-sm-12 col-12 my-2" *ngIf="!isSolved()">
+                            <label for="" class="">{{"Comment"|translate}}</label>
+                              <textarea class="form-control" formControlName="comment">
+                                {{selectedComplain?.comment}}
+                              </textarea>                            
+                        </div>
+                        <div class="col-md-7 col-sm-12 col-12 my-2" *ngIf="isSolved()">
+                            <label for="" class="">{{"Result"}}</label>
+                              <textarea class="form-control" formControlName="result">
+                                {{selectedComplain?.result}}
+                              </textarea>                            
+                        </div>
+                        <!-- <div class=" col-md-2 py-2 col-sm-12 col-12 mt-4">
+                            <button class="btn  btn-success px-4 w-100"  type="submit" [disabled]="!isValid()"
+                           
+                            >{{"Save" | translate}}</button>
+                           </div> -->
+                        
+                      
+                      
+                     
+                      
+                   
+                        
+
+                    </div>
+                   
+                    
+                </div>
+                
+              
+            </div>
+         
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn  btn-success" [disabled]="!isValid()">{{"Save" | translate}}</button>
+              </div>
+    </form>
+      </div>
+      
+    </div>
+  </div>
+</div>

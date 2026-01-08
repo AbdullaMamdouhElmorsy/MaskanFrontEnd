@@ -1,0 +1,330 @@
+<div class="accordion my-3" id="accordionExample">
+    <div class="card">
+      <div class="card-header p-0" id="headingOne">
+        
+            <div class="add-branche p-1">
+                <span>{{"Filters"}} </span>
+              
+
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('add')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateAddIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+   
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+                <form action="" [formGroup]="filterVisitFormGroup" (ngSubmit)="filterVisit()">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="">{{"CreatedDateFrom" | translate}}</label>
+                                    <span class="required"> *</span>
+                                    <!-- <input type="date" class="form-control"  formControlName="CreatedDate">  -->
+                                    <p-calendar [showIcon]="true"   dateFormat="mm/dd/yy"	formControlName="CreatedDate" class="max-w-full">
+
+                                    </p-calendar>
+                                  
+                                </div>
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="">{{"UniteCode" | translate}}</label>
+                                    <input type="text" class="form-control" placeholder="{{'Code'| translate}}" formControlName="UniteCode"> 
+                                    <!-- <div class="alert" *ngIf="pattrenValidation('DepartmentLatinName')">
+                                        <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                                    </div> -->
+                                </div>
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="" class="">{{"PhoneNumber"| translate}}</label>
+                                    <input type="text" class="form-control" placeholder='{{"OwnerPhoneNumber" | translate}}' formControlName="PhoneNumber"> 
+                                    <div class="alert" *ngIf="pattrenValidation('PhoneNumber')">
+                                        <p class=" alert alert-danger">{{"messages.InvalidPhoneNumber"}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 my-2">
+                                    <label for="">{{"visitorNationalId" | translate}}</label>
+                                    <input type="text" class="form-control" placeholder="{{'NationalId' | translate}}" formControlName="VisiorNationalId"> 
+                                    
+                                  
+                                </div>
+                                <div class="col-md-3 my-2">
+                                    <label for="">{{"PlatNumber"| translate}}</label>
+                                    <input type="text" class="form-control" placeholder='{{"PlatNumber"| translate}}' formControlName="CarNumber"> 
+                                    
+                                  
+                                </div>
+
+                               
+                              
+                              <div class="col-md-7 row">
+                                
+                               
+                                <div class=" col-md-3 py-2 col-sm-12 col-12 mt-4">
+                                    <button class="btn   px-4 w-100"  type="submit" 
+                                    [disabled]="!isValidFilter()"
+                                    >{{"Filter" | translate}}</button>
+                                   </div>
+                                
+                              </div>
+                              
+                             
+                              
+                           
+                                
+
+                            </div>
+                           
+                            
+                        </div>
+                        
+                      
+                    </div>
+                 
+                
+            </form>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!--------------- Visit Table------------------  -->
+<div class="accordion my-3" id="accordionExample">
+    <div class="card">
+      <div class="card-header p-0" id="headingTwo">
+        
+            <div class="add-branche p-1">
+                <span class="mx-2">{{"Details"| translate}}</span>
+                <button
+                type="button"
+                
+                aria-colspan=""
+                icon="pi pi-file"
+                (click)="exportexcel()"
+                
+                class=" ml-3 btn btn-outline-success bg-gray  px-4"
+                pTooltip="CSV"
+                tooltipPosition="bottom">
+                {{"Export" | translate}}
+            </button>
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('table')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateTableIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+                <div class="card">
+                    <p-table
+                        #dt2
+                        id="visit-table-op"
+                        [value]="visits"
+                        dataKey="id"
+                        [rows]="10"
+                        [showCurrentPageReport]="true"
+                        [rowsPerPageOptions]="[10, 25, 50]"
+                        [loading]="loading"
+                        [paginator]="true"
+                        editMode="row" 
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+                        styleClass="p-datatable-gridlines"
+                        selectionMode="single"
+                        >
+                        <!-- <ng-template pTemplate="caption">
+                            <div class="flex">
+                                <span class="p-input-icon-left ml-auto">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />`
+                                </span>
+                            </div>
+                        </ng-template> -->
+                        <ng-template pTemplate="header">
+                            <!-- <tr>
+                                <th >Id</th>
+                                <th >Unite Id</th>
+                                <th >Unite Code</th>
+                                <th >created User</th>
+                                <th >phone Number</th>
+                                <th >complain Type</th>
+                                <th >Created Date</th>
+                              
+                                <th >Status</th>
+                                <th >Last User Action</th>
+                                 
+                               
+                                
+                            </tr> -->
+                            <tr class="">
+                                <th style="min-width:6rem">
+                                    <div class="flex align-items-center">
+                                        {{"UniteCode" | translate}}
+                                        <p-columnFilter type="text" field="uniteCode" display="menu"></p-columnFilter>
+                                    </div>
+                                    
+                                    </th>
+                                    <th style="min-width:9rem">
+                                        <div class="flex align-items-center">
+                                           {{"OwnerUserName" | translate}}
+                                            <p-columnFilter type="text" field="userName" display="menu"></p-columnFilter>
+                                        </div>
+                                        
+                                        </th>
+                                        <th style="min-width:9rem">
+                                            <div class="flex align-items-center">
+                                                {{"OwnerPhoneNumber" | translate}}
+                                                <p-columnFilter type="text" field="phoneNumber" display="menu"></p-columnFilter>
+                                            </div>
+                                            
+                                            </th>
+                                        
+                                <th style="min-width:14rem">
+                                    <div class="flex align-items-center">
+                                       {{"VisitorName" | translate}}
+                                        <p-columnFilter type="text" field="visitorName" display="menu"></p-columnFilter>
+                                    </div>
+                                    </th>
+                                <!-- <th>
+                                    <p-columnFilter type="text" field="uniteCode"></p-columnFilter>
+                                </th> -->
+                                <th style="min-width:7rem">
+                                    <div class="flex align-items-center">
+                                        {{"PlatNumber" | translate}}
+                                        <p-columnFilter type="text" field="visitorCarNumber" display="menu"></p-columnFilter>
+                                    </div>
+                                    </th>
+                                
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="createdUser"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:9rem">
+                                        <div class="flex align-items-center">
+                                            {{"VisitorNationalId" | translate}}
+                                            <p-columnFilter type="text" field="visitorNationalId" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="phoneNumber"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:12rem">
+                                        <div class="flex align-items-center">
+                                            {{"VisitDate" | translate}}
+                                            <p-columnFilter type="date" field="visitDate" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                    <!-- <th>
+                                        <p-columnFilter type="text" field="complainType"></p-columnFilter>
+                                    </th> -->
+                                    <th style="min-width:6rem">
+                                        <div class="flex align-items-center">
+                                            {{"Visited" | translate}}
+                                            <p-columnFilter type="boolean" field="Visited" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                   
+                                    <th style="min-width:12rem">
+                                        <div class="flex align-items-center">
+                                            {{"LastUserAction" | translate}}
+                                            <p-columnFilter type="text" field="lastUserActionName" display="menu"></p-columnFilter>
+                                        </div>
+                                        </th>
+                                        <th style="min-width:4rem">
+                                            <div class="flex align-items-center">
+                                                
+                                                {{"Actions" | translate}}
+                                                <p-columnFilter type="text" field="lastUserActionName" display="menu"></p-columnFilter>
+                                            </div>
+                                            </th>
+                                        
+                                      
+                                        
+                               
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-visit let-ri="rowIndex">
+                            <tr>
+                                
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{visit.uniteCode}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{visit.createdUserName}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{visit.phoneNumber}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{visit.visitorName}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{visit.visitorCarNumber}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{visit.visitorNationalId}}</span>
+                                </td>
+                                
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ visit.visitDate }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ visit.visited }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ visit.lastUserActionName }}</span>
+                                </td>
+    
+                               
+                                <td>
+                                    <div class="text-center">
+                                        <button class="ml-1 btn-style btn btn-outline-success px-3" (click)="Done(visit.id)" [disabled]="visit.visited">{{"Done"}}</button>
+    
+                                    </div>
+                                   
+                                </td>
+                               
+                                
+                               
+                              
+                               
+                            </tr>
+                        </ng-template>
+                         
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="12" class="text-center">{{"No data available"}}</td>
+                            </tr>
+                        </ng-template>
+                        
+                    </p-table>
+                </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+    
+

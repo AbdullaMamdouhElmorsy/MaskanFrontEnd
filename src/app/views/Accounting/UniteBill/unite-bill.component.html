@@ -1,0 +1,720 @@
+<div class="accordion my-3" id="accordionExample">
+  
+
+  
+  <div class="card">
+      <div class="card-header p-0" id="headingOne">
+        
+            <div class="add-branche p-1">
+                <span>{{"AssignBillToUnite" | translate}} </span>
+                
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('add')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateAddIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+   
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+                <form action="" [formGroup]="uniteBillFormGroup" (ngSubmit)="assignBillToUnites()">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-12">
+                            <div class="row">
+                               
+                              
+                                <div class="col-md-3 my-auto">
+                                    <label for="">{{"SelectBill" | translate}}</label>
+                                    <strong class="required">*</strong>
+                                    <!-- <select  class="form-control" formControlName="blockId">
+                                        <option value="">{{"Select"}}</option>
+                                        <option [value]="block.id" *ngFor="let block of blocks">{{block.number}} - {{block.code}}</option>
+                                    </select> -->
+                                    <ng-autocomplete
+                                    #auto
+                                    [data]="bills"
+                                    [searchKeyword]="'name'"
+                                    placeholder="Enter Bill Name"
+                                    (selected)='selectBill($event)'
+                                    (inputChanged)='onChangeBillSearch($event)'
+                                    (inputFocused)='onFocused($event)'
+                                    [isLoading]="billLoading"
+                                    [itemTemplate]="itemTemplate"
+                                   
+                                    [notFoundTemplate]="notFoundTemplate">
+                                  </ng-autocomplete>
+                                
+                                  <ng-template #itemTemplate let-item>
+                                    <a [innerHTML]="item.name"></a>
+                                    <!-- <a [innerHTML]="item.code"></a> -->
+                                  </ng-template>
+                                
+                                  <ng-template #notFoundTemplate let-notFound>
+                                    <div [innerHTML]="notFound"></div>
+                                  </ng-template>
+                                </div>
+                                <div class="col-md-3">
+                                    <div>
+                                        <label for="" >{{"UniteType" | translate}}</label>
+                                    </div>
+                                   
+
+                                <p-multiSelect  [options]="uniteTypes"  formControlName="uniteTypes"
+                                defaultLabel="{{'Select' | translate}}"
+                                styleClass="w-100"	
+                                [showClear]="true"
+                                optionLabel="name" optionValue="id"></p-multiSelect>
+                                </div>
+
+                                
+                                <div class="col-md-3">
+                                    <div>
+                                        <label for="">{{"Unites" |translate}}</label>
+                                    </div>
+                                   
+
+                                <p-multiSelect  [options]="unites"  formControlName="unites"
+                                defaultLabel="{{'SelectUniteCodes' |translate}}"
+                                (onFilter)="uniteCodeFilter($event)"
+                                [lazy]="false" 
+                               
+                                (onLazyLoad)="uniteCodeFilter($event)"
+                                #loader
+                                
+                               
+                                [showClear]="true"	
+                                styleClass="w-100"	
+                               
+                                optionLabel="label" optionValue="value"
+                                >
+                                
+
+
+
+
+                                
+                            </p-multiSelect>
+
+                                </div>
+
+                                
+                               
+                             
+                              <div class=" col-md-2 py-2 col-sm-12 col-12 mt-4 ">
+                                <button class="btn   px-4 w-100"  type="submit" [disabled]="!isValid()"
+                               
+                                >{{"Save" | translate}}</button>
+                               </div>
+                            
+                             </div>
+                           
+                                
+
+                            
+                           
+                            
+                        </div>
+                        
+                      
+                    </div>
+                 
+                
+            </form>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+
+
+
+ <!--------------- Unite Table------------------  -->
+ <div class="accordion my-3" id="accordionExample2">
+  <div class="card">
+    <div class="card-header p-0" id="headingTwo">
+      <div class="add-branche p-1">
+        <span class="mx-2">{{"Details" | translate }}</span>
+        <button
+        type="button"
+        
+        aria-colspan=""
+        icon="pi pi-file"
+        (click)="exportexcel()"
+        
+        class=" ml-3 btn btn-outline-success bg-gray  px-4"
+        pTooltip="CSV"
+        tooltipPosition="bottom">
+        {{"Export"| translate}}
+    </button>
+      </div>
+      <div class="add-button">
+        <button
+          class="btn-none"
+          type="button"
+          data-toggle="collapse"
+          data-target="#collapseTwo"
+          aria-expanded="true"
+          aria-controls="collapseTwo"
+          (click)="slideToggle('table')"
+        >
+          <i
+            class="fas fa-angle-up"
+            [ngClass]="rotateTableIcon ? 'icon-down' : ''"
+          ></i>
+          <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+        </button>
+      </div>
+    </div>
+    <!-- [rowsPerPageOptions]="[2, 4, 50]" -->
+    <div
+      id="collapseTwo"
+      class="collapse show"
+      aria-labelledby="headingTwo"
+      data-parent="#accordionExample2"
+    >
+      <div class="col-md-12">
+        <div class="w-100 py-2 m-0">
+          <div class="card">
+          
+
+            <p-table
+            u id="uniteBill-table"
+              #dt
+              [value]="uniteBills"
+              dataKey="id"
+              [rows]="10"
+              [showCurrentPageReport]="true"
+              [rowsPerPageOptions]="[10, 25, 50]"
+              [loading]="loading"
+              [paginator]="true"
+              editMode="row"
+              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+             
+              [lazy]="true"
+              (onLazyLoad)="paginate($event)"
+              styleClass="p-datatable-gridlines"
+              selectionMode="single"
+              [totalRecords]="totalNumberOfUniteBills"
+              [responsive]="true"
+            >
+         
+              <ng-template pTemplate="header">
+
+                <!-- <tr>
+                  <th *ngFor="let col of columns">
+                      {{ col.header }}
+                  </th>
+              </tr> -->
+                <tr>
+                  
+                  <!-- <th style="min-width: 5rem">
+                    <div class="flex align-items-center">
+                      ID
+                      <p-columnFilter
+                        type="text"
+                        field="id"
+                        display="menu"
+                        [showOperator]="false"
+                        [showAddButton]="false"
+                        [showMatchModes]="false"
+                      ></p-columnFilter>
+                    </div>
+                  </th> -->
+                  
+                  <th style="min-width: 5rem">
+                    <div class="flex align-items-center">
+                      {{"UniteCode" | translate}}
+                      <p-columnFilter
+                        type="text"
+                        field="uniteCode"
+                        display="menu"
+                        [showOperator]="false"
+                        [showAddButton]="false"
+                        [showMatchModes]="false"
+                      >
+                      </p-columnFilter>
+                    </div>
+                  </th>
+                  <th style="min-width: 5rem">
+                    <div class="flex align-items-center">
+                      
+                      {{"UniteStatus" | translate}}
+                      <p-columnFilter field="uniteStatus" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                          <ng-template pTemplate="header">
+                              <div class="px-3 pt-3 pb-0">
+                                  <span class="font-bold">{{"Select"| translate}}</span>
+                              </div>
+                          </ng-template>
+                          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                              <p-dropdown   [options]="uniteStatus" placeholder="Select" (onChange)="filter($event)" optionLabel="label">
+                                  
+                              </p-dropdown>
+                              <!-- <select class="form-control" optionLabel="name"  [ngModel]="value" (onChange)="filter($event)"  >
+                               <option value="s1">select</option>
+                               <option value="s2">select</option>
+                              </select> -->
+                          </ng-template>
+                      </p-columnFilter>
+                    </div>
+                  </th>
+
+                 
+
+                  <th style="min-width: 7rem">
+                    <div class="flex align-items-center">
+                      
+                      {{"UniteType" | translate}}
+                      <p-columnFilter
+                        type="text"
+                        field="uniteType"
+                        display="menu"
+                        [showOperator]="false" 
+                                      
+                        [showAddButton]="false" 
+                        [showMatchModes]="false"
+                      ></p-columnFilter>
+                    </div>
+                  </th>
+                  <th style="min-width: 7rem">
+                    <div class="flex align-items-center">
+                      {{"BlockCode" | translate}}
+                      <p-columnFilter
+                        type="text"
+                        field="blockCode"
+                        display="menu"
+                        [showOperator]="false" 
+                                      
+                        [showAddButton]="false" 
+                        [showMatchModes]="false"
+                      ></p-columnFilter>
+                    </div>
+                  </th>
+
+                  <th style="min-width: 7rem">
+                    <div class="flex align-items-center">
+                      
+                      {{"Bill" | translate}}
+                      <p-columnFilter
+                        type="text"
+                        field="billName"
+                        display="menu"
+                        [showOperator]="false" 
+                                      
+                        [showAddButton]="false" 
+                        [showMatchModes]="false"
+                      
+                      ></p-columnFilter>
+                    </div>
+                  </th>
+                  <th style="min-width: 7rem">
+                    <div class="flex align-items-center">
+                      {{"PerPeriodType" | translate}}
+                      <p-columnFilter field="perPeriodType" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                          <ng-template pTemplate="header">
+                              <div class="px-3 pt-3 pb-0">
+                                  <span class="font-bold">{{"Select" | translate}}</span>
+                              </div>
+                          </ng-template>
+                          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                              <p-dropdown   [options]="perPeriodTypes" placeholder="Select" (onChange)="filter($event)" optionLabel="label">
+                                  
+                              </p-dropdown>
+                              
+                          </ng-template>
+                      </p-columnFilter>
+                    </div>
+                  </th>
+                  <th style="min-width: 6rem">
+                    <div class="flex align-items-center">
+                       {{"Amount" | translate}}
+                      <p-columnFilter
+                        type="text"
+                        field="billAmount"
+                        display="menu"
+                        [showOperator]="false" 
+                                      
+                        [showAddButton]="false" 
+                        [showMatchModes]="false"
+                      ></p-columnFilter>
+                    </div>
+                  </th>
+                  <th style="min-width: 12rem">
+                    <div class="flex align-items-center">
+                       {{"CreatedDate" | translate}}
+                      <p-columnFilter
+                        type="date"
+                        field="createdDate"
+                        display="menu"
+                        [showOperator]="false" 
+                                      
+                        [showAddButton]="false" 
+                        [showMatchModes]="false"
+                      ></p-columnFilter>
+                    </div>
+                  </th>
+                  <th style="min-width: 5rem">
+                    <div class="flex align-items-center">
+                       {{"Paid" | translate}}
+                      <p-columnFilter
+                        type="boolean"
+                        field="paid"
+                      ></p-columnFilter>
+                    </div>
+                    <th style="min-width: 10rem">
+                      <div class="flex align-items-center">
+                         {{"CreatedUser" | translate}}
+                       
+                      </div>
+                  </th>
+                  <th>{{"Actions" | translate}}</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-uniteBill>
+                <tr>
+                  <td>
+                    <span class="ml-1 vertical-align-middle">{{
+                      uniteBill.id
+                    }}</span>
+                  </td>
+                  <td>
+                    <span class="ml-1 vertical-align-middle">{{
+                      uniteBill.uniteCode
+                    }}</span>
+                  </td>
+                  <td>
+                    <span class="ml-1 vertical-align-middle">{{
+                      uniteBill.uniteStatus
+                    }}</span>
+                  </td>
+                  <td>
+                    <span class="ml-1 vertical-align-middle">{{
+                      uniteBill.uniteType
+                    }}</span>
+                  </td>
+                  <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        uniteBill.blockCode
+                      }}</span>
+                    </td>
+
+                  <td>
+                    <span class="ml-1 vertical-align-middle">{{
+                      uniteBill.billName
+                    }}</span>
+                  </td>
+                  <!-- <td>
+                                  <span class="ml-1 vertical-align-middle">{{ uniteBill.passportId }}</span>
+                              </td> -->
+                  <td>
+                    <span class="ml-1 vertical-align-middle">{{
+                      uniteBill.billAmouint
+                    }}</span>
+                  </td>
+
+                  <td>
+                    <span class="ml-1 vertical-align-middle">{{
+                      uniteBill.createdDate
+                    }}</span>
+                  </td>
+
+                  <td>
+                    <span class=" ml-1 vertical-align-middle">{{
+                      uniteBill.paid
+                    }}</span>
+                  </td>
+                  <td>
+                    <span class="ml-1 vertical-align-middle">{{
+                      uniteBill.createdUser
+                    }}</span>
+                  </td>
+                 
+                 
+                 
+                 
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="10" class="text-center">No Data found.</td>
+                </tr>
+              </ng-template>
+              <!-- ----------------Edit Cells --------------->
+              <ng-template
+                pTemplate="body"
+                let-uniteBill
+                let-editing="editing"
+                let-ri="rowIndex"
+              >
+                <tr [pEditableRow]="uniteBill">
+                 
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input
+                          pInputText
+                          type="text"
+                          class="form-control"
+                          [(ngModel)]="uniteBill.uniteCode"
+                          disabled
+                        />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{ uniteBill.uniteCode }}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                     
+                      <ng-template pTemplate="input">
+                        <select
+                          class="form-control"
+                          [(ngModel)]="uniteBill.uniteStatus"
+                        >
+                          <option
+                            [value]="status.label"
+                            *ngFor="let status of uniteStatus"
+                            [selected]="
+                              status.label == uniteBill.uniteBillStatus ? true : null
+                            "
+                          >
+                            {{ status.label }}
+                          </option>
+                        </select>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{ uniteBill.uniteStatus }}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input
+                          pInputText
+                          type="text"
+                          class="form-control"
+                          [(ngModel)]="uniteBill.uniteType"
+                          disabled
+                        />
+                      </ng-template>
+                    
+                      <ng-template pTemplate="output">
+                        {{ uniteBill.uniteType }}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input
+                          pInputText
+                          type="text"
+                          class="form-control"
+                          [(ngModel)]="uniteBill.blockCode"
+                          disabled
+                        />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{ uniteBill.blockCode }}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input
+                          pInputText
+                          type="text"
+                          class="form-control"
+                          [(ngModel)]="uniteBill.billName"
+                          disabled
+                        />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{ uniteBill.billName }}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input
+                          pInputText
+                          type="text"
+                          class="form-control"
+                          [(ngModel)]="uniteBill.perPeriodType"
+                          disabled
+                        />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{ uniteBill.perPeriodType }}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+                  <td>
+                      <p-cellEditor>
+                        <ng-template pTemplate="input">
+                          <input
+                            pInputText
+                            type="number"
+                            class="form-control"
+                            [(ngModel)]="uniteBill.billAmount"
+                            disabled
+                          />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          {{ uniteBill.billAmount }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                    <td>
+                      <p-cellEditor>
+                        <ng-template pTemplate="input">
+                          <input
+                            pInputText
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="uniteBill.createdDate"
+                            disabled
+                          />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          {{ uniteBill.createdDate }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+
+                    <td class="w-100 m-auto center">
+                      <p-cellEditor>
+                        <ng-template pTemplate="input">
+                          
+                          <p-checkbox
+                            [(ngModel)]="uniteBill.paid"
+                            [binary]="uniteBill.paid"
+                            [disabled]="true"
+                            class="w-100l"
+                          ></p-checkbox>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                         
+                          <input
+                            type="checkbox"
+                            class="form-check-input text-center m-auto"
+                            id="exampleCheck1"
+                            (click)="updateBillStatus($event,uniteBill)"
+                            [checked]="uniteBill.paid"
+                            
+                          />
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                    <td>
+                      <p-cellEditor>
+                        <ng-template pTemplate="input">
+                          <input
+                            pInputText
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="uniteBill.billAmount"
+                            disabled
+                          />
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          {{ uniteBill.createdUser}}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                 
+                  
+               
+                
+
+                  <td>
+                    <div class="row">
+                      <!-- <div
+                        class="flex align-items-center justify-content-center gap-2 col-md-6"
+                      >
+                        <button
+                          *ngIf="!editing"
+                          pButton
+                          pRipple
+                          type="button"
+                          pInitEditableRow
+                          (click)="onRowEditInit(uniteBill)"
+                          class="p-button-rounded p-button-text"
+                        >
+                          <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+
+                        <button
+                          *ngIf="editing"
+                          pButton
+                          pRipple
+                          type="button"
+                          pSaveEditableRow
+                          (click)="onRowEditSave(uniteBill)"
+                          class="p-button-rounded p-button-text p-button-success mr-2"
+                        >
+                          <i class="fa-solid fa-check"></i>
+                        </button>
+                        <button
+                          *ngIf="editing"
+                          pButton
+                          pRipple
+                          type="button"
+                          pCancelEditableRow
+                          (click)="onRowEditCancel(uniteBill, ri)"
+                          class="p-button-rounded p-button-text p-button-danger"
+                        >
+                          <i class="fa-solid fa-xmark"></i>
+                        </button>
+                      </div> -->
+                      <div class="col-md-12 m-auto">
+                        <button class="btn-none">
+                          <i
+                            class="fa-solid fa-trash text-danger"
+                            (click)="
+                              confirmDelete(
+                                uniteBill.billName +' ' +'Assigned To ('+(uniteBill.uniteCode)+')',
+                                uniteBill.id,
+                                ri
+                              )
+                            "
+                          ></i>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+

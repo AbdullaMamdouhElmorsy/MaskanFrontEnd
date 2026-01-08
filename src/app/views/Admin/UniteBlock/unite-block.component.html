@@ -1,0 +1,254 @@
+<div class="accordion my-3" id="accordionExample">
+    <div class="card">
+      <div class="card-header p-0" id="headingOne">
+        
+            <div class="add-branche p-1">
+                <span>{{"Create" |translate}} {{"UniteBlock"| translate}}</span>
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('add')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateAddIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+   
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+                <form action="" [formGroup]="uniteBlockFormGroup" (ngSubmit)="createUniteBlock()">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-12">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-12 col-12 my-2">
+                                    <label for="">{{"Number" |translate}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'BlockNumber' | translate}}" formControlName="number"> 
+                                    <div class="alert" *ngIf="pattrenValidation('number')">
+                                        <p class=" alert alert-danger">{{"messages.OnlyNumberMessage" | translate}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12 my-2">
+                                    <label for="">{{"Code" |translate}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'BlockCode' | translate}}" formControlName="code"> 
+                                    <!-- <div class="alert" *ngIf="pattrenValidation('code')">
+                                        <p class=" alert alert-danger">{{"messages.OnlyNumberMessage" | translate}}</p>
+                                    </div> -->
+                                </div>
+                                
+                               
+                              <div class=" col-md-2 py-2 col-sm-12 col-12 mt-4">
+                                <button class="btn   px-4 w-100"  type="submit" [disabled]="!isValid()"
+                               
+                                >{{"Save" | translate}}</button>
+                               </div>
+                                
+
+                            </div>
+                           
+                            
+                        </div>
+                        
+                      
+                    </div>
+                 
+                
+            </form>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+<!--------------- Unite Table------------------  -->
+<div class="accordion my-3" id="accordionExample2">
+    <div class="card">
+      <div class="card-header p-0" id="headingTwo">
+        
+            <div class="add-branche p-1">
+                <span>{{"Details" | translate}}</span>
+            </div>
+         <div class="add-button ">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('table')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateTableIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseTwo" class="collapse show m-0 p-0" aria-labelledby="headingTwo" data-parent="#accordionExample2">
+        <div class="col-md-12 w-100 m-auto m-0 p-0">
+            <div class="col-12 w-100 py-2 m-auto">
+                <div class="card m-auto">
+                    <p-table
+                        #dt
+                        [value]="unitesBlocks"
+                        dataKey="id"
+                        [rows]="10"
+                        [showCurrentPageReport]="true"
+                        [rowsPerPageOptions]="[10, 25, 50]"
+                        [loading]="loading"
+                        [lazy]="true"
+                        dir="ltr"
+                        (onLazyLoad)="paginate($event)"
+                        [totalRecords]="totalNumberOfRecords"
+                        [paginator]="true"
+                        editMode="row" 
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        styleClass="p-datatable-gridlines"
+                        [tableStyle]="{ 'min-width': '10rem' }"
+                        >
+                        <!-- <ng-template pTemplate="caption">
+                            <div class="flex">
+                                <span class="p-input-icon-left ml-auto">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />`
+                                </span>
+                            </div>
+                        </ng-template> -->
+                        <ng-template pTemplate="header">
+                            <tr>
+                              
+                                <!-- <th >ID</th> -->
+                                <th  style="width: 10%;">{{"BlockNumber" |translate}}</th>
+                                <th style="width: 10%;">{{"Code" | translate}}</th>
+                                <th style="width: 1%">{{"Actions" | translate}}</th>
+                               
+                
+                               
+                               
+                                
+                            </tr>
+                            <tr>
+                                <!-- <th>
+                                    <p-columnFilter type="text" field="id"></p-columnFilter>
+                                </th> -->
+                                <th>
+                                    <p-columnFilter type="text" field="number"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter type="text" field="code"></p-columnFilter>
+                                </th>
+                                <th>
+
+                                </th>
+                                
+                                
+                                  
+                                    
+                                
+                               
+                            </tr>
+                        </ng-template>
+                        <!-- ------------------Colums------------- -->
+                        <ng-template pTemplate="body" let-uniteBlock>
+                            
+                           
+                            <tr>
+                                
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ uniteBlock.id }}</span>
+                                </td> -->
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ uniteBlock.number }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ uniteBlock.code }}</span>
+                                </td>
+                                
+                              
+                               
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="5">No Data found.</td>
+                            </tr>
+                        </ng-template>
+                        <!-- ----------------Edit Cells --------------->
+                        <ng-template pTemplate="body" let-uniteBlock let-editing="editing" let-ri="rowIndex">
+                           
+                            <tr [pEditableRow]="uniteBlock">
+                                <!-- <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="uniteBlock.id" disabled>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{uniteBlock.id}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td> -->
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="number" class="form-control" [(ngModel)]="uniteBlock.number">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{uniteBlock.number}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="uniteBlock.code">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{uniteBlock.code}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                            <td>
+                                <div class="row">
+                                    <div class="flex align-items-center justify-content-center gap-2 col-md-6">
+                                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow  (click)="onRowEditInit(uniteBlock)" class="p-button-rounded p-button-text">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                       
+                                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow (click)="onRowEditSave(uniteBlock,ri)" class="p-button-rounded p-button-text p-button-success mr-2">
+                                            <i class="fa-solid fa-check"></i>
+                                        </button>
+                                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow  (click)="onRowEditCancel(uniteBlock, ri)" class="p-button-rounded p-button-text p-button-danger">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4 m-auto">
+                                        <button class="btn-none">
+                                            <i class="fa-solid fa-trash text-danger"  (click)="confirmDelete(uniteBlock.number+'-'+uniteBlock.code,uniteBlock.id,ri)"></i>
+       
+                                           </button>
+                                    </div>
+                                </div>
+                               
+
+                                
+                            </td>
+                           
+                              
+                           
+                           
+                            
+                            </tr>
+                            
+                            
+                        </ng-template>
+                        <!-- <ng-template pTemplate="body" class="m-auto"  let-userType>
+                         
+                         </ng-template> -->
+                    </p-table>
+                </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+

@@ -1,0 +1,101 @@
+<div class="accordion my-3" id="accordionExample" *ngIf="visit">
+    <div class="card">
+      <div class="card-header p-0" id="headingOne">
+        
+            <div class="add-branche p-1">
+                <span>{{"visit Details"}} </span>
+              
+
+            </div>
+         <!-- <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('add')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateAddIcon?'icon-down':''"></i>            
+
+               
+   
+
+              </button>
+         </div> -->
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="">{{"Created Date"}}</label>
+                                    <input disabled type="text" class="form-control"  [value]="visit.createdDate"> 
+                                    <!-- <p-calendar [showIcon]="true"   dateFormat="mm/dd/yy"	 class="max-w-full">
+
+                                    </p-calendar> -->
+                                  
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="">{{"Visited Date"}}</label>
+                                    <input disabled type="text" class="form-control"  [value]="visit.visitDate"> 
+                                    <!-- <p-calendar [showIcon]="true"   dateFormat="mm/dd/yy"	 class="max-w-full">
+
+                                    </p-calendar> -->
+                                  
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="">{{"Visitor Name"}}</label>
+                                    <input disabled type="text" class="form-control"  [value]="visit.visitorName"> 
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="">{{"Visitor Car Number"}}</label>
+                                    <input disabled type="text" class="form-control" placeholder="Plat Number" [value]="visit.visitorCarNumber"> 
+                                </div>
+                               
+                               
+                                <div class="col-md-3 my-2">
+                                    <label for="">{{"Visitor NtaionalId"}}</label>
+                                    <input disabled type="text" class="form-control" placeholder="National id" [value]="visit.visitorNationalId"> 
+                                    
+                                  
+                                </div>
+                                <div class="col-md-2 my-2 col-sm-12 col-12">
+                                    <label for="">{{"Unite Code"}}</label>
+                                    <input disabled type="text" class="form-control" placeholder="{{'Unite Code'}}" [value]="visit.uniteCode"> 
+                                    <!-- <div class="alert" *ngIf="pattrenValidation('DepartmentLatinName')">
+                                        <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                                    </div> -->
+                                </div>
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="" class="">{{"Owner Phone Number"}}</label>
+                                    <input disabled type="text" class="form-control" placeholder="Complainer Phone Number" [value]="visit.phoneNumber"> 
+                                   
+                                </div>
+                                
+
+                                <div class=" col-md-2 py-2 col-sm-12 col-12 mt-4">
+                                    <button class="btn   px-4 w-100" 
+                                     (click)="Done()"
+                                    >{{"Done"}}</button>
+                                   </div>
+                                
+                             
+                              
+                             
+                              
+                           
+                                
+
+                            </div>
+                           
+                            
+                        </div>
+                        
+                      
+                    </div>
+                 
+                
+           
+        </div>
+      </div>
+    </div>
+    </div>
+</div>

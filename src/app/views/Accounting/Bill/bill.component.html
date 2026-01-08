@@ -1,0 +1,435 @@
+<div class="accordion my-3" id="accordionExample">
+    <div class="card">
+      <div class="card-header p-0" id="headingOne">
+        
+            <div class="add-branche p-1">
+                <span>{{"CreateBill" | translate}}</span>
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('add')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateAddIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+   
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+                <form action="" [formGroup]="billFormGroup" (ngSubmit)="createBill()">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-12">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-12 col-12 my-2">
+                                    <label for="">{{"Name" | translate}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'BillName'|translate}}" formControlName="name"> 
+                                    <div class="alert" *ngIf="pattrenValidation('name')">
+                                        <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate }}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-2 col-sm-12 col-12 my-2">
+                                    <label for="">{{"Amount" | translate}}</label><strong class="required">*</strong>
+                                    <input type="number" class="form-control" placeholder="{{'BilAmount' | translate}}" formControlName="amount"> 
+                                    <!-- <div class="alert" *ngIf="pattrenValidation('number')">
+                                        <p class=" alert alert-danger">{{"messages.OnlyNumberMessage" | translate}}</p>
+                                    </div> -->
+                                </div>
+                                <div class="col-md-2 col-sm-12 col-12 my-2">
+                                    <label for="">{{"PerPeriodType" | translate}}</label><strong class="required">*</strong>
+                                    <select class="form-control" formControlName="perPeriodType">
+                                        <option value="null">{{"Select"| translate}}</option>
+                                        <option [value]="type.value" *ngFor="let type of perPeriodTypes">{{type.label}}</option>
+                                    </select>
+                                </div>
+                                <!-- <div class="col-md-2 col-sm-12 col-12 my-2">
+                                    <label for="">{{"Run Date Day"}}</label>
+                                    <strong class="required" *ngIf="!isOnce()">*</strong>
+                                    <input type="number" class="form-control" placeholder="{{'The Day Of Month That Bill Will Run On The System '}}" formControlName="runDay"> 
+                                    <div class="alert" *ngIf="pattrenValidation('runDay')">
+                                        <p class=" alert alert-danger">Please Enter valid Number Between 1-32</p>
+                                    </div>
+                                </div> -->
+                              
+                                <div class="col-md-1 my-auto">
+                                    <div class="form-group form-check my-auto">
+                                        <input type="checkbox" class="form-check-input" id="exampleCheck1" formControlName="allUnites" >
+                                        <label class="form-check-label" for="exampleCheck1">{{"AllUnites" | translate}}</label>
+                                      </div>
+                                </div>
+                               
+                              <div class=" col-md-2 py-2 col-sm-12 col-12 mt-4">
+                                <button class="btn   px-4 w-100"  type="submit" [disabled]="!isValid()"
+                               
+                                >{{"Save" | translate}}</button>
+                               </div>
+                                
+
+                            </div>
+                           
+                            
+                        </div>
+                        
+                      
+                    </div>
+                 
+                
+            </form>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+<!--------------- Unite Table------------------  -->
+<div class="accordion my-3" id="accordionExample2">
+    <div class="card">
+      <div class="card-header p-0" id="headingTwo">
+        
+            <div class="add-branche p-1">
+                <span>{{"Details" | translate}}</span>
+            </div>
+         <div class="add-button ">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('table')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateTableIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseTwo" class="collapse show m-0 p-0" aria-labelledby="headingTwo" data-parent="#accordionExample2">
+        <div class="col-md-12 w-100 m-auto m-0 p-0">
+            <div class="col-12 w-100 py-2 m-auto">
+                <div class="card m-auto">
+                    <p-table
+                        #dt
+                        [value]="bills"
+                        dataKey="id"
+                        [rows]="10"
+                        [showCurrentPageReport]="true"
+                        [rowsPerPageOptions]="[10, 25, 50]"
+                        [loading]="loading"
+                        [lazy]="true"
+                        selectionMode="single"
+                        (onLazyLoad)="paginate($event)"
+                        [totalRecords]="totalNumberOfRecords"
+                        [paginator]="true"
+                        editMode="row" 
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        styleClass="p-datatable-gridlines"
+                        [tableStyle]="{ 'min-width': '10rem' }"
+                        >
+                        <!-- <ng-template pTemplate="caption">
+                            <div class="flex">
+                                <span class="p-input-icon-left ml-auto">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />`
+                                </span>
+                            </div>
+                        </ng-template> -->
+                        <ng-template pTemplate="header">
+                           
+                            <tr>
+                               
+                                <th style="min-width:5rem">
+                                    <div class="flex align-items-center">
+                                       {{"Name" | translate}}
+                                        <p-columnFilter type="text" field="name" display="menu"
+                                        [showOperator]="false" 
+                                                           
+                                        [showAddButton]="false" 
+                                        [showMatchModes]="false"
+                                        
+                                        
+                                        ></p-columnFilter>
+                                    </div>
+                                    </th>
+                                    <th style="min-width:7rem">
+                                        <div class="flex align-items-center">
+                                            
+                                            {{"Amount" | translate}}
+                                            <p-columnFilter 
+                                            [showOperator]="false" 
+                                        
+                                            [showAddButton]="false" 
+                                            [showMatchModes]="false"
+                                            
+                                            type="text" field="amount" display="menu">
+
+
+
+                                            </p-columnFilter>
+                                        </div>
+                                        </th>
+
+
+
+                                <!-- <th>
+                                    <p-columnFilter type="text" field="uniteStatus"></p-columnFilter>
+                                </th> -->
+                                
+                             
+                                <th style="min-width:7rem">
+                                    <div class="flex align-items-center">
+                                       {{"PerPeriodType" | translate}}
+                                        <!-- <p-columnFilter type="none" field="perPeriodType" display="menu" 
+                                        [showOperator]="false" 
+                                        [matchModeOptions]="perPeriodTypesFilters"
+                                        [showAddButton]="false" 
+                                        [showClearButton]="false" 
+                                          >
+                                          
+                                        </p-columnFilter> -->
+                                        <p-columnFilter field="perPeriodType" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                                            <ng-template pTemplate="header">
+                                                <div class="px-3 pt-3 pb-0">
+                                                    <span class="font-bold">{{"Select"| translate}}</span>
+                                                </div>
+                                            </ng-template>
+                                            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                                <p-dropdown   [options]="perPeriodTypes" placeholder="Select" (onChange)="filter($event)" optionLabel="label">
+                                                    
+                                                </p-dropdown>
+                                                <!-- <select class="form-control" optionLabel="name"  [ngModel]="value" (onChange)="filter($event)"  >
+                                                 <option value="s1">select</option>
+                                                 <option value="s2">select</option>
+                                                </select> -->
+                                            </ng-template>
+                                        </p-columnFilter>
+                                    </div>
+                                    </th>
+                                    <!-- <th style="min-width:7rem">
+                                        <div class="flex align-items-center">
+                                           Run Day
+                                            <p-columnFilter type="text" field="runDay" display="menu"
+                                            [showOperator]="false" 
+                                        
+                                            [showAddButton]="false" 
+                                            [showMatchModes]="false"
+                                            
+                                            ></p-columnFilter>
+                                        </div>
+                                        </th> -->
+                                        <th style="min-width:7rem">
+                                            <div class="flex align-items-center">
+                                                {{"AllUnites" | translate}}
+                                                <p-columnFilter type="boolean" field="allUnites"></p-columnFilter>
+                                            </div>
+                                            </th>
+                                  
+                                    <th style="min-width:7rem">
+                                        <div class="flex align-items-center">
+                                          {{"CreatedDate" | translate}}
+                                            <p-columnFilter type="date" field="createdDate" display="menu"
+                                            [showOperator]="false" 
+                                                           
+                                            [showAddButton]="false" 
+                                            [showMatchModes]="false"
+                                            
+                                            
+                                            ></p-columnFilter>
+                                           
+                                        </div>
+                                        </th>
+                                    
+                                    <th style="min-width:5rem">
+                                        <div class="flex align-items-center">
+                                           
+                                           {{"CreatedUser" | translate}}
+                                            <!-- <p-columnFilter type="text" field="createdUserName" display="menu"></p-columnFilter> -->
+                                        </div>
+                                        </th>
+                                
+                                        <th>{{"Actions" | translate}}</th>
+                                 
+                                    
+                                
+                               
+                            </tr>
+                        </ng-template>
+                        <!-- ------------------Colums------------- -->
+                        <ng-template pTemplate="body" let-bill>
+                            
+                           
+                            <tr>
+                                
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ bill.id }}</span>
+                                </td> -->
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ bill.name}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ bill.amount }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ bill.perPeriodType}}</span>
+                                </td>
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ bill.runDay}}</span>
+                                </td> -->
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ bill.allUnites}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ bill.createdDate }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ bill.createdUserName}}</span>
+                                </td>
+                                
+                              
+                               
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="8" class="text-center">No Data found.</td>
+                            </tr>
+                        </ng-template>
+                        <!-- ----------------Edit Cells --------------->
+                        <ng-template pTemplate="body" let-bill let-editing="editing" let-ri="rowIndex">
+                           
+                            <tr [pEditableRow]="bill">
+                                <!-- <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="bill.id" disabled>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{bill.id}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td> -->
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="bill.name">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{bill.name}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="number" class="form-control" [(ngModel)]="bill.amount">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{bill.amount}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <select class="form-control" [(ngModel)]="bill.perPeriodType">
+                                                <option [value]="type.label" *ngFor="let type of perPeriodTypes" [selected]="type.label==bill.perPeriodType?true:null" >
+                                                 {{type.label}}
+                                             </option> 
+                                         </select>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{bill.perPeriodType}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+
+                                <!-- <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="number" class="form-control" [(ngModel)]="bill.runDay">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{bill.runDay}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td> -->
+                                <td class="m-auto center">
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                          
+                                            <p-checkbox [(ngModel)]="bill.allUnites"  [binary]="bill.allUnites"></p-checkbox>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            
+                                             <input type="checkbox" class="form-check-input text-center m-auto" id="exampleCheck1" [checked]="bill.allUnites" disabled>
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="bill.createdDate" disabled>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{bill.createdDate}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="bill.createdUserName" disabled>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{bill.createdUserName}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                            <td>
+                                <div class="row">
+                                    <div class="flex align-items-center justify-content-center gap-2 col-md-6">
+                                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow  (click)="onRowEditInit(bill)" class="p-button-rounded p-button-text">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                       
+                                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow (click)="onRowEditSave(bill,ri)" class="p-button-rounded p-button-text p-button-success mr-2">
+                                            <i class="fa-solid fa-check"></i>
+                                        </button>
+                                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow  (click)="onRowEditCancel(bill, ri)" class="p-button-rounded p-button-text p-button-danger">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4 m-auto">
+                                        <button class="btn-none">
+                                            <i class="fa-solid fa-trash text-danger"  (click)="confirmDelete(bill.name,bill.id,ri)"></i>
+       
+                                           </button>
+                                    </div>
+                                </div>
+                               
+
+                                
+                            </td>
+                           
+                              
+                           
+                           
+                            
+                            </tr>
+                            
+                            
+                        </ng-template>
+                        <!-- <ng-template pTemplate="body" class="m-auto"  let-userType>
+                         
+                         </ng-template> -->
+                    </p-table>
+                </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+

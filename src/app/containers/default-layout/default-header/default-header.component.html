@@ -1,0 +1,190 @@
+<!--<c-header class="mb-4 d-print-none" position="sticky">-->
+<ng-container>
+  <c-container [fluid]="true">
+    <button
+      toggle="visible"
+      cHeaderToggler
+      [cSidebarToggle]="sidebarId"
+      class="ps-1"
+    >
+      <svg cIcon
+        name="cilMenu"
+        size="lg"
+      ></svg>
+    </button>
+   
+    <c-header-nav class="d-none d-lg-flex me-auto">
+      <button class="tenant-Name" >{{userInfo?.tenantName}}</button>
+    
+      <!-- <c-nav-item>
+        <a cNavLink routerLink="/dashboard" routerLinkActive="active">
+          Dashboard
+        </a>
+      </c-nav-item>
+      <c-nav-item>
+        <a cNavLink routerLink="/users" routerLinkActive="active">Users</a>
+      </c-nav-item>
+      <c-nav-item>
+        <a cNavLink routerLink="/settings" routerLinkActive="active">
+          Settings
+        </a>
+      </c-nav-item> -->
+    </c-header-nav>
+
+    <!-- <c-header-nav class="d-none d-lg-flex">
+      <c-nav-item>
+        <a routerLink="./" cNavLink>
+          <svg cIcon name="cilBell" size="lg"></svg>
+        </a>
+      </c-nav-item>
+      
+      <c-nav-item>
+        <a routerLink="./" cNavLink>
+          <svg cIcon name="cilEnvelopeOpen" size="lg"></svg>
+        </a>
+      </c-nav-item>
+    </c-header-nav> -->
+    <div class="mt-2 d-flex align-items-center">
+      <!-- TITLE Text on the left -->
+      <span class="mx-3 mb-2">{{currentLang?.toUpperCase()}}</span>
+    
+      <!-- Custom Slide Toggle -->
+      <label class="switch">
+        <input type="checkbox" [checked]="currentLang === 'ar'" (change)="switchLanguage()">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <c-header-nav class="ms-3">
+      <ng-container *ngTemplateOutlet="NotificationDropdown"></ng-container>
+    </c-header-nav>
+    <c-header-nav class="ms-3">
+      <ng-container *ngTemplateOutlet="userDropdown"></ng-container>
+    </c-header-nav>
+    
+  
+    
+    
+
+
+  </c-container>
+  <c-header-divider></c-header-divider>
+  <c-container [fluid]="true">
+    <c-breadcrumb-router class="ms-2"></c-breadcrumb-router>
+  </c-container>
+</ng-container>
+<!--</c-header>-->
+
+<ng-template #userDropdown>
+  <c-dropdown alignment="end" variant="nav-item">
+    <button
+      color=""
+      [caret]="false"
+      cDropdownToggle
+      class="py-0  btn-none"
+    >
+    <div class="avatar avatar-lg bg-main">
+     <span>{{userInfo?.firstName[0].toUpperCase()}} {{userInfo?.lastName[0].toUpperCase()}}</span> 
+      <span class="avatar-status bg-success"></span>
+    </div>
+    
+    <!-- <div class="avatar">
+      <img class="avatar-img" src="" alt="user@email.com">
+      
+    </div> -->
+
+    </button>
+    <ul cDropdownMenu class="pt-0 pr-5 w-auto">
+      
+      <li>
+        <h6 cDropdownHeader class="bg-light fw-semibold py-2">{{"Settings"| translate}}</h6>
+      </li>
+      <li></li>
+      <li>
+        <a routerLink="./profile" cDropdownItem>
+          <svg cIcon class="me-2" name="cilUser"></svg>
+          {{"Profile"| translate}}
+        </a>
+      </li>
+      <!-- <li>
+        <h6 cDropdownHeader class="bg-light fw-semibold py-2">Lang</h6>
+        
+      </li> -->
+      
+      <li>
+        <div class="">
+          <a routerLink="" cDropdownItem (click)="logOut()" >
+            <div class="row">
+         
+              <div class="col-md-2">
+                <i class="fa-solid fa-right-from-bracket  fa-sm "></i>
+              </div>
+              <div class="col-md-3">
+                <span class="">{{"LogOut" | translate}}</span>
+              </div>
+              </div>
+          </a>
+    
+      
+    </div>
+        
+
+        </li>
+    
+    </ul>
+  </c-dropdown>
+</ng-template>
+
+
+<ng-template #NotificationDropdown>
+  <c-dropdown alignment="end" variant="nav-item">
+    <button
+      color=""
+      [caret]="false"
+      cDropdownToggle
+      class="py-0  btn-none"
+    >
+    <div style="position: relative; display: inline-block;" class="notifiaionColor">
+      <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+        <path d="M8 16a2 2 0 0 0 1.985-1.75H6.015A2 2 0 0 0 8 16zm.104-14.9a1 1 0 0 0-1.208 0 1.007 1.007 0 0 0-.4.8A5.99 5.99 0 0 0 4 7c0 1.098-.37 2.16-.93 3.03C2.378 10.85 2 11.392 2 12c0 .552.448 1 1 1h10a1 1 0 0 0 1-1c0-.608-.378-1.15-1.07-1.97A6.014 6.014 0 0 1 12 7a5.99 5.99 0 0 0-2.496-4.1 1.007 1.007 0 0 0-.4-.8zM14 12a2 2 0 0 0-.41-1.19C12.862 9.941 12 8.579 12 7c0-1.987-1.28-3.674-3-4.314C7.28 3.326 6 5.013 6 7c0 1.579-.862 2.941-1.59 3.81A2 2 0 0 0 4 12h10z"/>
+      </svg>
+      <span 
+      *ngIf="(notificationMesages | async) as msg"
+       style="position: absolute; top: 0; right: 0; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 14px;">
+        {{ (notificationMesages | async)?.length }}
+
+      </span>
+    </div>
+   
+
+    </button>
+    <ul cDropdownMenu class="pt-0 pr-5 w-auto" *ngIf="(notificationMesages | async) as msg">
+      
+      <li>
+        <h6 cDropdownHeader class="bg-light fw-semibold py-2">{{"Notifications"| translate}}</h6>
+      </li>
+      <li></li>
+      <li *ngFor="let msg of (notificationMesages | async)">
+        <a class="dropdown-item" href="#">
+         
+      
+          <a 
+          cDropdownItem
+          [routerLink]="msg?.data?.Type === 'Request' 
+                        ? ['operation/requests'] 
+                        : ['operation/complaints']"
+            [queryParams]="{ Id: msg?.data?.Id }">
+                          <!-- <a [routerLink]="['operation/requests']"
+                          [queryParams]="{ Id: 65 }"
+                          > -->
+                          <strong>{{ msg?.notification?.title || 'No Title' }}</strong><br>
+          </a>
+      
+        </a>
+      </li>
+   
+    
+    
+    </ul>
+  </c-dropdown>
+</ng-template>
+

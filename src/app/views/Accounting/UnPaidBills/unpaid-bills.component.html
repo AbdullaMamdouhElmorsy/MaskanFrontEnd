@@ -1,0 +1,294 @@
+<div class="accordion my-3" id="accordionExample">
+ 
+  
+    
+    <div class="card">
+        <div class="card-header p-0" id="headingOne">
+          
+              <div class="add-branche p-1">
+                  <span>{{"DisabledUnites" | translate}} </span>
+                  <span class="text-warning">{{"messages.DisabledUnitesMessage" | translate}} </span>
+                  
+              </div>
+           <div class="add-button">
+              <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('add')" >
+                  <i class="fas fa-angle-up" [ngClass]="rotateAddIcon?'icon-down':''"></i>            
+                  <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+                 
+     
+  
+                </button>
+           </div>
+        </div>
+    
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="col-md-12 m-auto">
+              <div class="col-12  py-2 m-0">
+                  <form action="" [formGroup]="billCounterForm" (ngSubmit)="displedUnite()">
+                      <div class="row">
+                          <div class="col-md-12 col-xs-12 col-12">
+                              <div class="row">
+                                 
+                                
+                                  <!-- <div class="col-md-3 my-auto">
+                                      <label for="">{{"Select Bill"}}</label>
+                                      <strong class="required">*</strong>
+                                     
+                                      <ng-autocomplete
+                                      #auto
+                                      [data]="bills"
+                                      [searchKeyword]="'name'"
+                                      placeholder="Enter Bill Name"
+                                      (selected)='selectBill($event)'
+                                      (inputChanged)='onChangeBillSearch($event)'
+                                      (inputFocused)='onFocused($event)'
+                                      [isLoading]="billLoading"
+                                      [itemTemplate]="itemTemplate"
+                                     
+                                      [notFoundTemplate]="notFoundTemplate">
+                                    </ng-autocomplete>
+                                  
+                                    <ng-template #itemTemplate let-item>
+                                      <a [innerHTML]="item.name"></a>
+
+                                    </ng-template>
+                                  
+                                    <ng-template #notFoundTemplate let-notFound>
+                                      <div [innerHTML]="notFound"></div>
+                                    </ng-template>
+                                  </div> -->
+                                  <!-- <div class="col-md-3">
+                                      <div>
+                                          <label for="" >{{"Unite Type"}}</label>
+                                      </div>
+                                     
+  
+                                  <p-multiSelect  [options]="uniteTypes"  formControlName="uniteTypes"
+                                  defaultLabel="Select Unite Type"
+                                  styleClass="w-100"	
+                                  [showClear]="true"
+                                  optionLabel="name" optionValue="id"></p-multiSelect>
+                                  </div> -->
+  
+                                  
+                                  <div class="col-md-3">
+                                        <label for="">{{"BillCount" | translate}}</label>
+                                        <input type="number" class="form-control" formControlName="billCount" placeholder="{{'Count' | translate}}">
+                                        <div class="alert" *ngIf="pattrenValidation('billCount')">
+                                          <p class=" alert alert-danger">{{"InvalidNumber" | translate}}</p>
+                                      </div>
+
+                                  </div>
+                                  <div class="col-md-3">
+                                    <label for="">{{"TotalAmount" | translate}}</label>
+                                    <input type="number" class="form-control" placeholder="{{'GreaterorEqualAmount' | translate}}" formControlName="totalAmount">
+                                    <div class="alert" *ngIf="pattrenValidation('totalAmount')">
+                                      <p class=" alert alert-danger">{{"InvalidNumber" | translate}}</p>
+                                  </div>
+
+                              </div>
+  
+                                  
+                                 
+                               
+                                <div class=" col-md-2 py-2 col-sm-12 col-12 mt-4 ">
+                                  <button class="btn   px-4 w-100"  type="submit" [disabled]="!isValid()"
+                                 
+                                  >{{"Save" | translate}}</button>
+                                 </div>
+                              
+                               </div>
+                             
+                                  
+  
+                              
+                             
+                              
+                          </div>
+                          
+                        
+                      </div>
+                   
+                  
+              </form>
+          </div>
+        </div>
+      </div>
+      </div>
+  
+  
+  
+  
+  
+  
+   <!--------------- Unite Table------------------  -->
+   <div class="accordion my-3" id="accordionExample2">
+    <div class="card">
+      <div class="card-header p-0" id="headingTwo">
+        <div class="add-branche p-1">
+          <span class="mx-2">{{"Details" | translate }}</span>
+          <button
+          type="button"
+          
+          aria-colspan=""
+          icon="pi pi-file"
+          (click)="exportexcel()"
+          
+          class=" ml-3 btn btn-outline-success bg-gray  px-4"
+          pTooltip="CSV"
+          tooltipPosition="bottom">
+          {{"Export" | translate}}
+      </button>
+        </div>
+        <div class="add-button">
+          <button
+            class="btn-none"
+            type="button"
+            data-toggle="collapse"
+            data-target="#collapseTwo"
+            aria-expanded="true"
+            aria-controls="collapseTwo"
+            (click)="slideToggle('table')"
+          >
+            <i
+              class="fas fa-angle-up"
+              [ngClass]="rotateTableIcon ? 'icon-down' : ''"
+            ></i>
+            <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+          </button>
+        </div>
+      </div>
+      <!-- [rowsPerPageOptions]="[2, 4, 50]" -->
+      <div
+        id="collapseTwo"
+        class="collapse show"
+        aria-labelledby="headingTwo"
+        data-parent="#accordionExample2"
+      >
+        <div class="col-md-12">
+          <div class="w-100 py-2 m-0">
+            <div class="card">
+            
+  
+              <p-table
+               id="UnPaidUnite-table"
+                #dt
+                [value]="unPaidUnites"
+                dataKey="id"
+                [rows]="10"
+                [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[10, 25, 50]"
+                [loading]="loading"
+                [paginator]="true"
+                editMode="row"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+               
+                [lazy]="true"
+                (onLazyLoad)="paginate($event)"
+                styleClass="p-datatable-gridlines"
+                selectionMode="single"
+                [totalRecords]="totalNumberOfUpdatedUnites"
+                [responsive]="true"
+              >
+           
+                <ng-template pTemplate="header">
+  
+                  <tr>
+                    
+                   
+                    
+                    <th style="min-width: 10rem">
+                      <div class="flex align-items-center">
+                        {{"UniteCode" | translate}}
+                        <p-columnFilter
+                          type="text"
+                          field="uniteCode"
+                          [showOperator]="false"
+                          [showAddButton]="false"
+                          [showMatchModes]="false"
+                        >
+                        </p-columnFilter>
+                      </div>
+                    </th>
+                    <th style="min-width: 3rem">
+                      <div class="flex align-items-center">
+                        {{"BillCount" | translate}}
+                        <p-columnFilter field="billCount" type="text" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                        
+                        </p-columnFilter>
+                      </div>
+                    </th>
+  
+                   
+  
+                    <th style="min-width: 7rem">
+                      <div class="flex align-items-center">
+                      {{"TotalAmount"| translate}}
+                        <p-columnFilter
+                          type="text"
+                          field="totalAmount"
+                          placeholder="{{'GreaterorEqualAmount' | translate}}"
+                          [showOperator]="false" 
+                                        
+                          [showAddButton]="false" 
+                          [showMatchModes]="false"
+                        ></p-columnFilter>
+                      </div>
+                    </th>
+                   
+  
+                   
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-uniteBill>
+                  <tr>
+                    <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        uniteBill.uniteCode
+                      }}</span>
+                    </td>
+                    <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        uniteBill.billCount
+                      }}</span>
+                    </td>
+                    <td>
+                      <span class="ml-1 vertical-align-middle">{{
+                        uniteBill.totalAmount
+                      }}</span>
+                    </td>
+                  
+                 
+                   
+                   
+                  </tr>
+                </ng-template>
+  
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="10" class="text-center">{{"messages.NoDatafound"| translate}}</td>
+                  </tr>
+                </ng-template>
+              
+              </p-table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+      </div>
+  
+  
+  
+  
+  
+  
+  
+  
+  

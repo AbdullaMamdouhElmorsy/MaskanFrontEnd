@@ -1,0 +1,307 @@
+<div class="accordion my-3" id="accordionExample">
+    <div class="card">
+      <div class="card-header p-0" id="headingOne">
+        
+            <div class="add-branche p-1">
+                <span>{{"Create Tenant"}}</span>
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('add')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateAddIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+   
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+                <form action="" [formGroup]="tenantFormGroup" (ngSubmit)="createTenant()">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-12">
+                            <div class="row">
+                                <div class="col-md-2 col-sm-12 col-12 my-2">
+                                    <label for="">{{"Max Unites Number"}}</label>
+                                    <strong class="required">*</strong>
+                                    <input type="number" class="form-control" placeholder="{{' Number of Unites'}}" formControlName="maxUnitesNumber"> 
+                                    <div class="alert" *ngIf="pattrenValidation('maxUnitesNumber')">
+                                        <p class=" alert alert-danger">{{"messages.OnlyNumberMessage" | translate}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12 col-12 my-2">
+                                    <label for="">{{"Company Name"}}</label>
+                                    <strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'Name'}}" formControlName="companyName"> 
+                                    <div class="alert" *ngIf="pattrenValidation('companyName')">
+                                        <p class=" alert alert-danger">Please Enter Valid Name</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-12 col-12 my-2">
+                                    <label for="">{{"Expiration Date"}}</label>
+                                    <strong class="required">*</strong>
+                                    <input type="date" class="form-control" placeholder="{{'Date'}}" formControlName="expirationDate"> 
+                                    <!-- <div class="alert" *ngIf="pattrenValidation('code')">
+                                        <p class=" alert alert-danger">Please Enter Valid Name</p>
+                                    </div> -->
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label for="">{{"Status"}}</label>
+                                    <strong class="required">*</strong>
+                                    <select  class="form-control" formControlName="statusId">
+                                        <option  value="Select">{{"Select"}}</option>
+                                        <option [value]="status.value" *ngFor="let status of tenantStatus ">{{status.label}}</option>
+                                    </select>
+                                   
+                                </div>
+
+                                
+                               
+                              <div class=" col-md-2 py-2 col-sm-12 col-12 mt-4">
+                                <button class="btn   px-4 w-100"  type="submit" [disabled]="!isValid()"
+                               
+                                >{{"Save" | translate}}</button>
+                               </div>
+                                
+
+                            </div>
+                           
+                            
+                        </div>
+                        
+                      
+                    </div>
+                 
+                
+            </form>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+<!--------------- Unite Table------------------  -->
+<div class="accordion my-3" id="accordionExample2">
+    <div class="card">
+      <div class="card-header p-0" id="headingTwo">
+        
+            <div class="add-branche p-1">
+                <span>{{"Unite Block Details"}}</span>
+            </div>
+         <div class="add-button ">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('table')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateTableIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseTwo" class="collapse show m-0 p-0" aria-labelledby="headingTwo" data-parent="#accordionExample2">
+        <div class="col-md-12 w-100 m-auto m-0 p-0">
+            <div class="col-12 w-100 py-2 m-auto">
+                <div class="card m-auto">
+                    <p-table
+                        #dt2
+                        [value]="tenants"
+                        dataKey="id"
+                        [rows]="10"
+                        [showCurrentPageReport]="true"
+                        [rowsPerPageOptions]="[10, 25, 50]"
+                        [loading]="loading"
+                       
+                       
+                        [paginator]="true"
+                        editMode="row" 
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        styleClass="p-datatable-gridlines"
+                        [tableStyle]="{ 'min-width': '10rem' }"
+                        >
+                        <!-- <ng-template pTemplate="caption">
+                            <div class="flex">
+                                <span class="p-input-icon-left ml-auto">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />`
+                                </span>
+                            </div>
+                        </ng-template> -->
+                        <ng-template pTemplate="header">
+                            <tr>
+                              
+                                <!-- <th style="width: 2%;" >ID</th> -->
+                                <th  style="width: 40%;">Company Name</th>
+                                <th style="width: 15%;">Max Unites Number</th>
+                                <th style="width: 25%;">Status</th>
+                                <th style="width: 25%">Expiration Date</th>
+                                <th style="width: 5%;">{{"Actions" | translate}}</th>
+                
+                               
+                               
+                                
+                            </tr>
+                            <tr>
+                                <th>
+                                    <p-columnFilter type="text" field="id"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter type="text" field="companyName"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter type="text" field="maxUnitesNumber"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter type="text" field="status"></p-columnFilter>
+                                </th>
+                                <th>
+                                    <p-columnFilter type="text" field="expirationDate"></p-columnFilter>
+                                </th>
+                               
+                                
+                                  
+                                    
+                                
+                               
+                            </tr>
+                        </ng-template>
+                        <!-- ------------------Colums------------- -->
+                        <ng-template pTemplate="body" let-tenant>
+                            
+                           
+                            <tr>
+                                
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ tenant.id }}</span>
+                                </td> -->
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ tenant.compnayName }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ tenant.maxUnitesNumber }}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ tenant.status}}</span>
+                                </td>
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ tenant.expirationDate }}</span>
+                                </td>
+                                
+                              
+                               
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="5">No Data found.</td>
+                            </tr>
+                        </ng-template>
+                        <!-- ----------------Edit Cells --------------->
+                        <ng-template pTemplate="body" let-tenant let-editing="editing" let-ri="rowIndex">
+                           
+                            <tr [pEditableRow]="tenant">
+                                <!-- <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="tenant.id" disabled>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{tenant.id}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td> -->
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="tenant.companyName">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{tenant.companyName}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="tenant.maxUnitesNumber">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{tenant.maxUnitesNumber}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <select class="form-control" [(ngModel)]="tenant.statusId">
+                                                <option [value]="status.value" *ngFor="let status of tenantStatus" [selected]="status.value==tenant.statusId" >
+                                                 {{status.label}}
+                                             </option> 
+                                         </select>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{tenant.status}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="date" class="form-control" [(ngModel)]="tenant.expirationDate">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{tenant.expirationDate}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                            <td>
+                                <div class="row">
+                                    <div class="flex align-items-center justify-content-center gap-2 col-md-6">
+                                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow class="p-button-rounded p-button-text">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                       
+                                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow (click)="onRowEditSave(tenant)" class="p-button-rounded p-button-text p-button-success mr-2">
+                                            <i class="fa-solid fa-check"></i>
+                                        </button>
+                                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow   class="p-button-rounded p-button-text p-button-danger">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-4 m-auto">
+                                        <button class="btn-none">
+                                            <i class="fa-solid fa-trash text-danger"  (click)="confirmDelete(tenant.companyName,tenant.id,ri)"></i>
+       
+                                           </button>
+                                    </div>
+                                </div>
+                               
+
+                                
+                            </td>
+                           
+                              
+                           
+                           
+                            
+                            </tr>
+                            
+                            
+                        </ng-template>
+                        <!-- <ng-template pTemplate="body" class="m-auto"  let-userType>
+                         
+                         </ng-template> -->
+                    </p-table>
+                </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+

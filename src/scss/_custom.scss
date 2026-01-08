@@ -1,0 +1,156 @@
+// Here you can add other styles
+//@import "primeicons/primeicons.css";
+//Main Colors 
+// #3D2369 purple
+// #CBEAEE  light blue
+// #E5E65D green
+.bg-imge{
+    background-image: url('../assets/images/Maskan1.jpg');
+   background-color: #3D2369;
+   height: 100vh;
+    background-size:auto;
+}
+.p-column-filter-row{
+    //width:% !important;
+    padding: 2px;
+   // background-color: #2B547E !important;
+  }
+  
+
+.btn-none{
+    border-style: none;
+    border-bottom-style: none;
+   background-color: #808080;
+   width: 100%;
+   border-radius: 50%;
+   background-color:white;
+   
+    
+   
+}
+
+.active{
+    background-color: rgba(0,255,0,.7)	 	 !important;
+    border: #3D2369;
+    color: black !important;
+}
+.card{
+    overflow: visible !important;
+}
+label{
+    font-weight: 800;
+    font-size: 15px;
+}
+.add-button{
+ margin-left: 8px;
+}
+.icon-down{
+    transform: rotate(180deg);
+}
+.p-table {
+    direction: rtl;
+    text-align: right !important;
+  }
+.p-datatable[dir="rtl"] .p-datatable-thead > tr > th,
+.p-datatable[dir="rtl"] .p-datatable-tbody > tr > td {
+  text-align: right !important; /* Align to the right */
+}
+.card-header
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3D2369 ;
+    color: white;
+}
+label{
+    font-weight: 600;
+    font-size: 14px; 
+    }
+
+.required{
+    color: red;
+    margin: auto;
+    font-size: 16px;
+    margin-left: 5px;
+  }
+.btn{
+  
+    color: white !important;
+    font-weight: 600;
+    background-color: #3D2369 !important;
+
+}
+  span{
+  margin:2px;
+  font-weight: 500;
+  }
+  .nav-link{
+    color: white !important;
+    font-weight:480;
+   // font-size: 15px !important;
+  }
+  .nav-group-toggle{
+    color: white !important;
+    font-weight:600;
+    font-size: 18px !important;
+  }
+td{
+    font-weight:500;
+}
+svg{
+    font-size: 30px !important;
+}
+.btn:hover{
+   // rgba(76, 228, 76,) 
+    background-color: rgba(19, 219, 19, 1) !important;
+}
+.btn-style{
+    font-weight: 600;
+    font-size: 17px;
+    color: #3D2369 ;
+    border-color:#3D2369  ;
+    background-color: none;
+    text-decoration: none;
+   background-color: white ;
+   border-radius: 10px;
+}
+.btn-export{
+    font-weight: 600;
+    font-size: 17px;
+    color: white ;
+    background-color: none;
+    text-decoration: none;
+     padding: 5px 20px !important;
+  // background-color: rgba(19, 219, 19, .9) !important;
+   background-color: rgba(225, 226, 213, 0.616);
+   border-radius: 15px;
+}
+.bg-gray{
+    background-color: rgba(225, 226, 213, 0.616) !important;
+    border-radius: 15px;
+    border-color: #e7cf42 ;
+    border-width: 2px;
+}
+.btn-export:hover{
+    background-color: rgba(19, 219, 19, .9)
+}
+.btn-style:hover{
+    background-color:#3D2369 !important;
+    color: white !important;
+    overflow: hidden;
+}
+.bg-btn :hover{
+  background-color:#3D2369 !important;
+  color: white !important;
+  overflow: hidden;
+}
+.bg-main{
+    background-color:#3D2369;
+    
+}
+
+
+
+
+

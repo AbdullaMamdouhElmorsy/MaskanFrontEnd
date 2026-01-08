@@ -1,0 +1,229 @@
+<div class="accordion my-3" id="accordionExample">
+    <div class="card">
+      <div class="card-header p-0" id="headingOne">
+        
+            <div class="add-branche p-1">
+                <span>{{"CreateUniteType" |translate}}</span>
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"(click)="slideToggle('add')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateAddIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+   
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="col-md-12 m-auto">
+            <div class="col-12  py-2 m-0">
+                <form action="" [formGroup]="uniteTypeFormGroup" (ngSubmit)="createUniteType()">
+                    <div class="row">
+                        <div class="col-md-12 col-xs-12 col-12">
+                            <div class="row">
+                                <div class="col-md-4 col-sm-12 col-12 my-2">
+                                    <label for="">{{"Name" | translate}}</label><strong class="required">*</strong>
+                                    <input type="text" class="form-control" placeholder="{{'UniteType' | translate}}" formControlName="name"> 
+                                    <div class="alert" *ngIf="pattrenValidation('name')">
+                                        <p class=" alert alert-danger">{{"messages.NameValidaionMessage" | translate}}</p>
+                                    </div>
+                                </div>
+                                
+                               
+                              <div class=" col-md-2 py-2 col-sm-12 col-12 mt-4">
+                                <button class="btn   px-4 w-100"  type="submit" [disabled]="!isValid()"
+                               
+                                >{{"Save" | translate}}</button>
+                               </div>
+                                
+
+                            </div>
+                           
+                            
+                        </div>
+                        
+                      
+                    </div>
+                 
+                
+            </form>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+<!--------------- Unite Table------------------  -->
+<div class="accordion my-3" id="accordionExample2">
+    <div class="card">
+      <div class="card-header p-0" id="headingTwo">
+        
+            <div class="add-branche p-1">
+                <span>{{"Details" | translate}}</span>
+            </div>
+         <div class="add-button">
+            <button class="btn-none" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"(click)="slideToggle('table')" >
+                <i class="fas fa-angle-up" [ngClass]="rotateTableIcon?'icon-down':''"></i>            
+                <!-- <i class="cil-chevron-circle-up-alt"></i> -->
+               
+
+
+              </button>
+         </div>
+      </div>
+  
+      <div id="collapseTwo" class="collapse show m-0 p-0" aria-labelledby="headingTwo" data-parent="#accordionExample2">
+        <div class="col-md-12 w-100 m-auto m-0 p-0">
+            <div class="col-12 w-100 py-2 m-0">
+                <div class="card">
+                    <p-table
+                        #dt
+                        [value]="uniteTypes"
+                        dataKey="id"
+                        [rows]="10"
+                        [showCurrentPageReport]="true"
+                        [rowsPerPageOptions]="[10, 25, 50]"
+                        [loading]="loading"
+                        [paginator]="true"
+                        editMode="row" 
+                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                        styleClass="p-datatable-gridlines"
+                        [tableStyle]="{ 'min-width': '30rem' }"
+                        >
+                        <!-- <ng-template pTemplate="caption">
+                            <div class="flex">
+                                <span class="p-input-icon-left ml-auto">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Global Search" />`
+                                </span>
+                            </div>
+                        </ng-template> -->
+                        <ng-template pTemplate="header">
+                            <tr>
+                              
+                                <!-- <th >ID</th> -->
+                                <th style="width:5%" >{{"Name" | translate}}</th>
+                                <th style="width:.5%">{{"Actions" | translate}}</th>
+                               
+                
+                               
+                               
+                                
+                            </tr>
+                            <tr>
+                                <!-- <th>
+                                    <p-columnFilter type="text" field="id"></p-columnFilter>
+                                </th> -->
+                                <th>
+                                    <p-columnFilter type="text" field="name"></p-columnFilter>
+                                </th>
+                                <th>
+                                   
+                                </th>
+                              
+                                
+                                
+                                  
+                                    
+                                
+                               
+                            </tr>
+                        </ng-template>
+                        <!-- ------------------Colums------------- -->
+                        <ng-template pTemplate="body" let-uniteType>
+                            
+                           
+                            <tr>
+                                
+                                <!-- <td>
+                                    <span class="ml-1 vertical-align-middle">{{ uniteType.id }}</span>
+                                </td> -->
+                                <td>
+                                    <span class="ml-1 vertical-align-middle">{{ uniteType.name }}</span>
+                                </td>
+                                
+                              
+                               
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="5">No Data found.</td>
+                            </tr>
+                        </ng-template>
+                        <!-- ----------------Edit Cells --------------->
+                        <ng-template pTemplate="body" let-uniteType let-editing="editing" let-ri="rowIndex">
+                           
+                            <tr [pEditableRow]="uniteType">
+                                <!-- <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" [(ngModel)]="uniteType.id" disabled>
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{uniteType.id}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td> -->
+                                <td>
+                                    <p-cellEditor>
+                                        <ng-template pTemplate="input">
+                                            <input pInputText type="text" class="form-control" [(ngModel)]="uniteType.name">
+                                        </ng-template>
+                                        <ng-template pTemplate="output">
+                                            {{uniteType.name}}
+                                        </ng-template>
+                                    </p-cellEditor>
+                                </td>
+                            <td>
+                                <div class="row">
+                                    <div class="flex align-items-center justify-content-center gap-2 col-md-6">
+                                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow  (click)="onRowEditInit(uniteType)" class="p-button-rounded p-button-text">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                       
+                                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow (click)="onRowEditSave(uniteType)" class="p-button-rounded p-button-text p-button-success mr-2">
+                                            <i class="fa-solid fa-check"></i>
+                                        </button>
+                                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow  (click)="onRowEditCancel(uniteType, ri)" class="p-button-rounded p-button-text p-button-danger">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-6 m-auto">
+                                        <button class="btn-none">
+                                          
+                                            <i class="fa-solid fa-trash text-danger"  (click)="confirmDelete(uniteType.name,uniteType.id,ri)"></i>
+                                           </button>  
+                                       </div>
+                                </div>
+                               
+
+                                
+
+                                
+                            </td>
+                           
+                              
+                           
+                           
+                            
+                            </tr>
+                            
+                            
+                        </ng-template>
+                        <!-- <ng-template pTemplate="body" class="m-auto"  let-uniteType>
+                         
+                         </ng-template> -->
+                    </p-table>
+                </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+
+
