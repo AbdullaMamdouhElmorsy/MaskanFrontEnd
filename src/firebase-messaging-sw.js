@@ -9,7 +9,7 @@ firebase.initializeApp({
   projectId: "rehab-octoper",
   storageBucket: "rehab-octoper.firebasestorage.app",
   messagingSenderId: "821864131343",
-  appId: "1:821864131343:web:f20411d725ed7c53326c7a"
+  appId: "1:821864131343:web:f1673a4b500f8486326c7a"
 });
 
 // Retrieve Firebase Messaging
@@ -17,7 +17,6 @@ const messaging = firebase.messaging();
 
 // Handle background messages
 messaging.onBackgroundMessage((payload) => {
-  //console.log("Received background message: ", payload);
   self.registration.showNotification(payload.notification.title, {
     body: payload.notification.body,
     icon: "/firebase-logo.png"

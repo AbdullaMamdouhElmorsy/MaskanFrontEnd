@@ -19,6 +19,7 @@ export class AuthService {
    private loginUrl="Identity/LogIn";
    private TenantUrl="Identity/GetAllTenant"
    private chnagePassowrUrl="User/ChangePassword";
+   private updateNotificationTokenUrl="Identity/UpdateNotificationToken"; // Add your actual endpoint
    activeUrl= new BehaviorSubject<string>("");
     userInfo:UserInfo={
         firstName:null,
@@ -100,6 +101,17 @@ export class AuthService {
         return this.http.put<APIResponse>(this.chnagePassowrUrl,data).pipe(
             map(res=>res.result)
         )
+    }
+
+    /**
+     * Update notification token for logged-in user
+     * @param notificationToken FCM token for push notifications
+     */
+    updateNotificationToken(notificationToken: string)
+    {
+        return this.http.put<APIResponse>(this.updateNotificationTokenUrl, { notificationToken }).pipe(
+            map(res => res.result)
+        );
     }
 
 
