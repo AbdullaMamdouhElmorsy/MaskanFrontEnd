@@ -164,21 +164,12 @@
       </li>
       <li></li>
       <li *ngFor="let msg of (notificationMesages | async)">
-        <a class="dropdown-item" href="#">
-         
-      
-          <a 
+        <a
           cDropdownItem
-          [routerLink]="msg?.data?.Type === 'Request' 
-                        ? ['operation/requests'] 
-                        : ['operation/complaints']"
-            [queryParams]="{ Id: msg?.data?.Id }">
-                          <!-- <a [routerLink]="['operation/requests']"
-                          [queryParams]="{ Id: 65 }"
-                          > -->
-                          <strong>{{ msg?.notification?.title || 'No Title' }}</strong><br>
-          </a>
-      
+          [routerLink]="msg?.data?.Type === 'Request' ? ['operation/requests'] : ['operation/complaints']"
+          [queryParams]="{ Id: msg?.data?.Id }"
+          (click)="handleNotificationClick(msg)">
+          <strong>{{ msg?.notification?.title || 'No Title' }}</strong><br>
         </a>
       </li>
    
