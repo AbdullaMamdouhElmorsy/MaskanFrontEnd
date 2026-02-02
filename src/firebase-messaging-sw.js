@@ -9,6 +9,7 @@ firebase.initializeApp({
   projectId: "rehab-octoper",
   storageBucket: "rehab-octoper.firebasestorage.app",
   messagingSenderId: "821864131343",
+  //appId: "1:821864131343:web:f20411d725ed7c53326c7a"
   appId: "1:821864131343:web:f1673a4b500f8486326c7a"
 });
 
@@ -20,5 +21,17 @@ messaging.onBackgroundMessage((payload) => {
   self.registration.showNotification(payload.notification.title, {
     body: payload.notification.body,
     icon: "/firebase-logo.png"
+  });
+
+  // Also post the payload to all open clients so the app UI can update in real-time
+  // (for example, update notification count/list in the Angular app)
+  self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(clients => {
+    for (const client of clients) {
+      try {
+        client.postMessage({ type: 'FCM_BACKGROUND_MESSAGE', payload });
+      } catch (e) {
+        // ignore
+      }
+    }
   });
 });

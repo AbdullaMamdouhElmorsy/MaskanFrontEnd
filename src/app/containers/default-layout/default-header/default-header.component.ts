@@ -1,11 +1,11 @@
-import { Component, Input, Renderer2 } from '@angular/core';
+import { Component, Input, Renderer2, OnDestroy } from '@angular/core';
 import { AngularFireMessaging } from '@angular/fire/compat/messaging';
 import { Router } from '@angular/router';
 
 import { ClassToggleService, HeaderComponent } from '@coreui/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
-import { AuthService } from 'src/app/Global/Services/auth.service';
+import { AuthService } from '../../../Global/Services/auth.service';
 import { isThisTypeNode } from 'typescript';
 @Component({
   selector: 'app-default-header',
@@ -56,6 +56,8 @@ export class DefaultHeaderComponent extends HeaderComponent {
     this.translateService.use(this.currentLang);
     this.currentLang=localStorage.getItem("lang")??"en";
     this.getLayOutDirection();
+    // Listen for messages posted from the service worker (background messages)
+    window.addEventListener('message', this.handleSWMessage);
   }
    userInfo:any;
   logOut()
@@ -72,6 +74,52 @@ export class DefaultHeaderComponent extends HeaderComponent {
   } else {
     console.warn("No messages to save.");
   }
+
+  }
+
+  // Handle messages posted from the service worker
+  handleSWMessage = (event: MessageEvent) => {
+    try {
+      const data = event.data;
+      if (!data || data.type !== 'FCM_BACKGROUND_MESSAGE') return;
+      const message = data.payload;
+      const currentMessages = JSON.parse(localStorage.getItem("Notficaions") || "[]");
+      this.notificationMesages.next([message, ...currentMessages]);
+      this.saveNotificationMessages();
+    } catch (e) {
+      console.error('Error handling SW message', e);
+    }
+  }
+
+  // Remove a notification from the list (called when user clicks it)
+  removeNotification(msg: any) {
+    const messages = this.notificationMesages.getValue() || [];
+    const filtered = messages.filter((m: any) => {
+      const idA = m?.data?.Id ?? m?.data?.id ?? null;
+      const idB = msg?.data?.Id ?? msg?.data?.id ?? null;
+      if (idA && idB) return idA !== idB;
+      // fallback: compare title+body
+      const tA = m?.notification?.title || m?.data?.title || '';
+      const bA = m?.notification?.body || m?.data?.body || '';
+      const tB = msg?.notification?.title || msg?.data?.title || '';
+      const bB = msg?.notification?.body || msg?.data?.body || '';
+      return !(tA === tB && bA === bB);
+    });
+    this.notificationMesages.next(filtered);
+    this.saveNotificationMessages();
+  }
+
+  // Called from template when notification item is clicked
+  handleNotificationClick(msg: any) {
+    try {
+      this.removeNotification(msg);
+    } catch (e) {
+      console.error('Error removing notification', e);
+    }
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('message', this.handleSWMessage as any);
   }
  
   getUserInfo()
