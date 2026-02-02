@@ -15,6 +15,7 @@ export class NotificationService {
 
   // Request Notification Permission and Get Token
   requestPermission(): Promise<string | null> {
+    debugger;
     return new Promise((resolve, reject) => {
       this.afMessaging.requestToken
         .pipe(take(1))

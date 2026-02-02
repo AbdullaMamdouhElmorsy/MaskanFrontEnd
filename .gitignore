@@ -43,3 +43,17 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Production
+/dist-prod
+*.zip
+*.tar.gz
+
+# Environment files (if using local overrides)
+.env
+.env.local
+.env.production.local
+
+# Logs
+*.log
+logs/
